@@ -9,6 +9,7 @@ import {
 
 import type { Route } from './+types/root';
 
+import '@fortawesome/fontawesome-svg-core/styles.css';
 import '@/styles/app.css';
 
 export const links: Route.LinksFunction = () => [
