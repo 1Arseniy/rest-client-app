@@ -1,3 +1,5 @@
+import WelcomePanel from '@/components/welcome-panel/index';
+
 export function meta() {
   return [
     { title: 'New React Router App' },
@@ -6,5 +8,9 @@ export function meta() {
 }
 
 export default function Home() {
-  return <div>Hello</div>;
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <WelcomePanel />
+    </div>
+  );
 }
