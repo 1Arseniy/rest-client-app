@@ -10,6 +10,7 @@ import {
 import type { Route } from './+types/root';
 
 import Footer from '@/components/footer';
+import Header from '@/components/header';
 
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import '@/styles/app.css';
@@ -43,6 +44,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        <Header />
         {children}
         <Footer />
         <ScrollRestoration />

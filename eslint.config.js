@@ -9,7 +9,7 @@ import reactCompiler from 'eslint-plugin-react-compiler';
 import prettierEslint from 'eslint-plugin-prettier';
 
 export default tseslint.config([
-  globalIgnores(['dist', '.react-router']),
+  globalIgnores(['dist', '.react-router', 'coverage']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
