@@ -2,8 +2,20 @@ import { Input } from '@/components/ui/input/input';
 import { Button } from '@/components/ui/button/button';
 import { Label } from '@/components/ui/label/label';
 import { Link } from 'react-router';
+import { schemaSignup } from '@/validation/validation';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 export default function SignUp() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({
+    resolver: yupResolver(schemaSignup),
+    mode: 'onChange',
+  });
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
@@ -19,11 +31,17 @@ export default function SignUp() {
             Your Name
           </Label>
           <Input
+            {...register('name')}
             id="name"
-            type="email"
             placeholder="Write your name"
             className="w-full"
           />
+          <div
+            className="mt-2 ml-2 mr-2 text-sm italic text-red-700"
+            data-testid="fname-error"
+          >
+            {errors.name?.message}
+          </div>
         </div>
 
         <div className="mb-4">
@@ -34,11 +52,18 @@ export default function SignUp() {
             Your email address
           </Label>
           <Input
+            {...register('email')}
             id="email"
             type="email"
             placeholder="Write your email"
             className="w-full"
           />
+          <div
+            className="mt-2 ml-2 mr-2 text-sm italic text-red-700"
+            data-testid="fname-error"
+          >
+            {errors.email?.message}
+          </div>
         </div>
 
         <div className="mb-4">
@@ -49,11 +74,18 @@ export default function SignUp() {
             Your password
           </Label>
           <Input
+            {...register('password')}
             id="password"
             type="password"
             placeholder="Write your password"
             className="w-full"
           />
+          <div
+            className="mt-2 ml-2 mr-2 text-sm italic text-red-700"
+            data-testid="fname-error"
+          >
+            {errors.password?.message}
+          </div>
         </div>
 
         <div className="mb-6">
@@ -64,14 +96,21 @@ export default function SignUp() {
             Repeat password
           </Label>
           <Input
-            id="password-repeated"
+            {...register('passwordRepeat')}
+            id="passwordRepeat"
             type="password"
             placeholder="Repeat your password"
             className="w-full"
           />
+          <div
+            className="mt-2 ml-2 mr-2 text-sm italic text-red-700"
+            data-testid="fname-error"
+          >
+            {errors.passwordRepeat?.message}
+          </div>
         </div>
 
-        <Button variant="outline" className="w-full mb-2">
+        <Button disabled={!isValid} variant="outline" className="w-full mb-2">
           Sign Up
         </Button>
         <Link to="/sign-in">
