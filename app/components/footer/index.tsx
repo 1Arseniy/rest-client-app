@@ -3,13 +3,9 @@ import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 import rssLogo from '@/assets/images/rss-logo.svg';
 
-import '@/components/Footer/Footer.css';
+import { developers } from '@/config/developers';
 
-const developers = [
-  'https://github.com/1arseniy',
-  'https://github.com/ksugaevskaya',
-  'https://github.com/reginamos',
-];
+import '@/components/Footer/Footer.css';
 
 function Footer() {
   return (
