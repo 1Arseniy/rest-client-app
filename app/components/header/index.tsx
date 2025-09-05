@@ -29,8 +29,10 @@ function Header() {
     <div
       className={`${scrollY && 'scroll'} header sticky top-0 left-0 flex justify-between items-center pt-2.5 pb-2.5 pr-4 pl-4`}
     >
-      <div className="flex items-center gap-5">
-        <Link to="/">Logo</Link>
+      <header className="flex items-center gap-5">
+        <Link to="/" className="font-semibold">
+          Rest Client
+        </Link>
         <Select defaultValue="En">
           <SelectTrigger
             className={`w-[80px] cursor-pointer ${scrollY ? 'text-white' : 'text-black'}`}
@@ -47,7 +49,7 @@ function Header() {
             </SelectGroup>
           </SelectContent>
         </Select>
-      </div>
+      </header>
       <div>
         <Link className="hover:underline mr-5" to="/sign-in">
           Sign In

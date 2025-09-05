@@ -24,6 +24,7 @@ export default defineConfig({
         '**/dist/**',
       ],
     },
+    setupFiles: ['app/__tests__/tests.ts'],
   },
   resolve: {
     alias: {

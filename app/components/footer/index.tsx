@@ -3,17 +3,13 @@ import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 import rssLogo from '@/assets/images/rss-logo.svg';
 
-import '@/components/Footer/Footer.css';
+import { developers } from '@/config/developers';
 
-const developers = [
-  'https://github.com/1arseniy',
-  'https://github.com/ksugaevskaya',
-  'https://github.com/reginamos',
-];
+import '@/components/Footer/Footer.css';
 
 function Footer() {
   return (
-    <div className="p-1 flex items-center justify-around footer">
+    <footer className="p-1 flex items-center justify-around footer">
       <div className="flex gap-1">
         {developers.map((developer) => (
           <a className="m-1" key={developer} href={developer}>
@@ -25,7 +21,7 @@ function Footer() {
       <a href="https://rs.school/courses/reactjs">
         <img className="size-11" src={rssLogo} alt="rss-logo" />
       </a>
-    </div>
+    </footer>
   );
 }
 
