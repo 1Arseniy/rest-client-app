@@ -13,7 +13,7 @@ const developers = [
 
 function Footer() {
   return (
-    <div className="p-1 flex items-center justify-around footer">
+    <footer className="p-1 flex items-center justify-around footer">
       <div className="flex gap-1">
         {developers.map((developer) => (
           <a className="m-1" key={developer} href={developer}>
@@ -25,7 +25,7 @@ function Footer() {
       <a href="https://rs.school/courses/reactjs">
         <img className="size-11" src={rssLogo} alt="rss-logo" />
       </a>
-    </div>
+    </footer>
   );
 }
 
