@@ -1,0 +1,36 @@
+{
+  "auth": {
+    "signIn": "Войти",
+    "signUp": "Зарегистрироваться"
+  },
+  "header": {
+    "logo": "Rest Client",
+    "languageLabel": "язык",
+    "language": "РУ"
+  },
+  "mainRoute": {
+    "welcomePanel": {
+      "welcome": "Добро пожаловать"
+    }
+  },
+  "form": {
+    "labels": {
+      "name": "Ваше имя",
+      "email": "Ваш электронный адрес",
+      "password": "Ваш пароль",
+      "repeatPassword": "Повторите пароль"
+    },
+    "placeholders": {
+      "name": "Напишите свое имя",
+      "email": "Нипишите свой адрес электронной почты",
+      "password": "Напишите свой пароль",
+      "repeatPassword": "Повторите свой пароль"
+    }
+  },
+  "signInRoute": {
+    "linkToSignUp": "Еще не зарегестрированы? Тогда зарегестрируйтесь!"
+  },
+  "signUpRoute": {
+    "linkToSignIn": "Уже зарегестрированы? Тогда войдите!"
+  }
+}
