@@ -9,6 +9,9 @@ import {
 
 import type { Route } from './+types/root';
 
+import Footer from '@/components/footer';
+import Header from '@/components/header';
+
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import '@/styles/app.css';
 
@@ -41,7 +44,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        <Header />
         {children}
+        <Footer />
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -70,7 +75,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <main className="pt-16 p-4 container mx-auto">
+    <main className="pt-16 p-4 container mx-auto h-screen flex justify-center items-center">
       <h1>{message}</h1>
       <p>{details}</p>
       {stack && (

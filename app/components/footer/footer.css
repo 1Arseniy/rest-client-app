@@ -1,0 +1,6 @@
+@media (max-width: 768px) and (min-width: 350px) {
+  .footer {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
