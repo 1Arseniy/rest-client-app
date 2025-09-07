@@ -36,7 +36,7 @@ export default function SignUp() {
           <Input
             {...register('name')}
             id="name"
-            placeholder="Write your name"
+            placeholder={t('form.placeholders.name')}
             className="w-full"
           />
           <div
@@ -58,7 +58,7 @@ export default function SignUp() {
             {...register('email')}
             id="email"
             type="email"
-            placeholder="Write your email"
+            placeholder={t('form.placeholders.email')}
             className="w-full"
           />
           <div
@@ -80,7 +80,7 @@ export default function SignUp() {
             {...register('password')}
             id="password"
             type="password"
-            placeholder="Write your password"
+            placeholder={t('form.placeholders.password')}
             className="w-full"
           />
           <div
@@ -102,7 +102,7 @@ export default function SignUp() {
             {...register('passwordRepeat')}
             id="passwordRepeat"
             type="password"
-            placeholder="Repeat your password"
+            placeholder={t('form.placeholders.repeatPassword')}
             className="w-full"
           />
           <div

@@ -39,7 +39,7 @@ export default function SignIn() {
             {...register('email')}
             id="email"
             type="email"
-            placeholder="Write your email"
+            placeholder={t('form.placeholders.email')}
             className="w-full"
           />
 
@@ -62,7 +62,7 @@ export default function SignIn() {
             {...register('password')}
             id="password"
             type="password"
-            placeholder="Write your password"
+            placeholder={t('form.placeholders.password')}
             className="w-full"
           />
 
