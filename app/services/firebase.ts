@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app';
+import { FirebaseError, initializeApp } from 'firebase/app';
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -21,16 +21,25 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const logInWithEmailAndPassword = async (email, password) => {
+const logInWithEmailAndPassword = async (email: string, password: string) => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
-  } catch (err) {
-    console.error(err);
-    alert(err.message);
+  } catch (err: unknown) {
+    if (err instanceof FirebaseError) {
+      console.error(err.code, err.message);
+      alert(err.message);
+    } else {
+      console.error(err);
+      alert('An unexpected error occurred');
+    }
   }
 };
 
-const registerWithEmailAndPassword = async (name, email, password) => {
+const registerWithEmailAndPassword = async (
+  name: string,
+  email: string,
+  password: string
+) => {
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password);
     const user = res.user;
@@ -40,9 +49,14 @@ const registerWithEmailAndPassword = async (name, email, password) => {
       authProvider: 'local',
       email,
     });
-  } catch (err) {
-    console.error(err);
-    alert(err.message);
+  } catch (err: unknown) {
+    if (err instanceof FirebaseError) {
+      console.error(err.code, err.message);
+      alert(err.message);
+    } else {
+      console.error(err);
+      alert('An unexpected error occurred');
+    }
   }
 };
 
