@@ -24,14 +24,14 @@ export default function LanguageSelect({ scrollY }: LanguageSelectProps) {
   }, []);
 
   const changeLanguage = (lng: 'en' | 'ru') => {
-    setCurrentLanguage(lng)
+    setCurrentLanguage(lng);
     document.documentElement.lang = lng;
     i18n.changeLanguage(lng).catch(console.error);
   };
 
   if (!isClient) {
     return (
-      <select 
+      <select
         value={currentLanguage}
         disabled
         className={`w-[80px] ${scrollY ? 'text-white' : 'text-black'}`}
@@ -43,7 +43,7 @@ export default function LanguageSelect({ scrollY }: LanguageSelectProps) {
   }
 
   return (
-      <Select
+    <Select
       value={currentLanguage}
       onValueChange={(lng: 'en' | 'ru') => changeLanguage(lng)}
     >
@@ -58,7 +58,7 @@ export default function LanguageSelect({ scrollY }: LanguageSelectProps) {
         <SelectGroup>
           <SelectLabel>{t('header.languageLabel')}</SelectLabel>
           <SelectItem value="en">EN</SelectItem>
-           <SelectItem value="ru">RU</SelectItem>
+          <SelectItem value="ru">RU</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>

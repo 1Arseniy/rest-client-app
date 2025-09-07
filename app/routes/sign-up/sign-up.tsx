@@ -12,7 +12,6 @@ export default function SignUp() {
   const { t } = useTranslation();
   const {
     register,
-    handleSubmit,
     formState: { errors, isValid },
   } = useForm({
     resolver: yupResolver(schemaSignup),
@@ -23,7 +22,7 @@ export default function SignUp() {
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
         <h2 className="mb-6 text-center text-2xl font-bold text-gray-800">
-           {t('auth.signUp')}
+          {t('auth.signUp')}
         </h2>
 
         <div className="mb-4">
@@ -52,7 +51,7 @@ export default function SignUp() {
             htmlFor="email"
             className="mb-1 block text-sm font-medium text-gray-700"
           >
-           {t('form.labels.email')}
+            {t('form.labels.email')}
           </Label>
           <Input
             {...register('email')}
@@ -74,7 +73,7 @@ export default function SignUp() {
             htmlFor="password"
             className="mb-1 block text-sm font-medium text-gray-700"
           >
-             {t('form.labels.password')}
+            {t('form.labels.password')}
           </Label>
           <Input
             {...register('password')}
@@ -112,13 +111,13 @@ export default function SignUp() {
             {errors.passwordRepeat?.message}
           </div>
         </div>
-         
+
         <Button disabled={!isValid} variant="outline" className="w-full mb-2">
-         {t('auth.signUp')}
+          {t('auth.signUp')}
         </Button>
         <Link to="/sign-in">
           <Button variant="link" className="w-full text-center text-gray-500">
-             {t('signUpRoute.linkToSignIn')}
+            {t('signUpRoute.linkToSignIn')}
           </Button>
         </Link>
       </div>
