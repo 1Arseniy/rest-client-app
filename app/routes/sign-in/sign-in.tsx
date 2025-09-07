@@ -1,10 +1,13 @@
 import { Input } from '@/components/ui/input/input';
 import { Button } from '@/components/ui/button/button';
 import { Label } from '@/components/ui/label/label';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { schemaSignin } from '@/validation/validation';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { auth, logInWithEmailAndPassword } from '../../services/firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useEffect } from 'react';
 
 export default function SignIn() {
   const {
@@ -15,8 +18,19 @@ export default function SignIn() {
     resolver: yupResolver(schemaSignin),
     mode: 'onChange',
   });
+  const [user, loading, error] = useAuthState(auth);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (loading) {
+      // maybe trigger a loading screen
+      return;
+    }
+    if (user) navigate('/dashboard');
+  }, [user, loading, navigate]);
 
-  const onSubmit = (data) => {};
+  const onSubmit = (data) => {
+    logInWithEmailAndPassword(data.email, data.password);
+  };
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
@@ -72,7 +86,7 @@ export default function SignIn() {
 
         <Button
           disabled={!isValid}
-          onClick={onSubmit}
+          onClick={handleSubmit(onSubmit)}
           variant="outline"
           className="w-full"
         >
