@@ -13,6 +13,8 @@ import {
 } from '@/components/ui/select/select';
 
 import '@/components/header/header.css';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth, logout } from '@/services/firebase';
 
 function Header() {
   const [scrollY, setScrollY] = useState(0);
@@ -24,6 +26,12 @@ function Header() {
     window.addEventListener('scroll', changeScroll);
     return () => window.removeEventListener('scroll', changeScroll);
   }, [setScrollY]);
+
+  const [user] = useAuthState(auth);
+
+  const handleClick = () => {
+    logout();
+  };
 
   return (
     <div
@@ -50,14 +58,20 @@ function Header() {
           </SelectContent>
         </Select>
       </header>
-      <div>
-        <Link className="hover:underline mr-5" to="/sign-in">
-          Sign In
+      {user ? (
+        <Link onClick={handleClick} className="hover:underline mr-5" to="/">
+          Sign Out
         </Link>
-        <Link className="hover:underline" to="/sign-up">
-          Sign Up
-        </Link>
-      </div>
+      ) : (
+        <div>
+          <Link className="hover:underline mr-5" to="/sign-in">
+            Sign In
+          </Link>
+          <Link className="hover:underline" to="/sign-up">
+            Sign Up
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
