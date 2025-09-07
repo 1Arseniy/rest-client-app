@@ -10,17 +10,15 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 export default function SignIn() {
   const { t } = useTranslation();
-  
+
   const {
     register,
-    handleSubmit,
     formState: { errors, isValid },
   } = useForm({
     resolver: yupResolver(schemaSignin),
     mode: 'onChange',
   });
 
-  const onSubmit = (data) => {};
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
@@ -56,7 +54,7 @@ export default function SignIn() {
             htmlFor="password"
             className="mb-1 block text-sm font-medium text-gray-700"
           >
-              {t('form.labels.password')}
+            {t('form.labels.password')}
           </Label>
           <Input
             {...register('password')}
@@ -73,13 +71,8 @@ export default function SignIn() {
             {errors.password?.message}
           </div>
         </div>
-          
-        <Button
-          disabled={!isValid}
-          onClick={onSubmit}
-          variant="outline"
-          className="w-full"
-        >
+
+        <Button disabled={!isValid} variant="outline" className="w-full">
           {t('auth.signIn')}
         </Button>
 

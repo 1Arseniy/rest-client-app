@@ -1,26 +1,26 @@
-import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
-import en from "./locales/en.json";
-import ru from "./locales/ru.json";
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import en from './locales/en.json';
+import ru from './locales/ru.json';
 
 let clientI18n: typeof i18n | null = null;
 
-export function createI18nInstance(lang: "en" | "ru" = "en") {
+export function createI18nInstance(lang: 'en' | 'ru' = 'en') {
   if (clientI18n) {
     clientI18n.changeLanguage(lang);
     return clientI18n;
   }
 
   clientI18n = i18n.createInstance();
-  
+
   clientI18n.use(initReactI18next).init({
     resources: {
       en: { translation: en },
       ru: { translation: ru },
     },
     lng: lang,
-    fallbackLng: "en",
-    supportedLngs: ["en", "ru"],
+    fallbackLng: 'en',
+    supportedLngs: ['en', 'ru'],
     interpolation: { escapeValue: false },
     react: { useSuspense: false },
   });

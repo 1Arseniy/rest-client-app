@@ -26,15 +26,15 @@ function Header() {
         <Link to="/" className="font-semibold">
           Rest Client
         </Link>
-        
+
         <LanguageSelect scrollY={scrollY} />
       </header>
       <div>
         <Link className="hover:underline mr-5" to="/sign-in">
-           {t('auth.signIn')}
+          {t('auth.signIn')}
         </Link>
         <Link className="hover:underline" to="/sign-up">
-           {t('auth.signUp')}
+          {t('auth.signUp')}
         </Link>
       </div>
     </div>

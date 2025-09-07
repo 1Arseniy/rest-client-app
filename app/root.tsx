@@ -6,7 +6,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-  type LoaderFunctionArgs
+  type LoaderFunctionArgs,
 } from 'react-router';
 import type { Route } from './+types/root';
 import Footer from '@/components/footer';
@@ -15,19 +15,24 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import '@/styles/app.css';
 import { createI18nInstance } from './i18n';
 import { I18nextProvider } from 'react-i18next';
+import type { i18n as I18nType } from 'i18next';
 import React, { useEffect, useState } from 'react';
+import { Toaster } from 'sonner';
 
 type LoaderData = {
   lang: 'en' | 'ru';
 };
 
-export async function loader({ request }: LoaderFunctionArgs): Promise<LoaderData> {
-  const acceptLanguage = request.headers.get("accept-language");
-  let lang: LoaderData["lang"] = "en";
-  
+export async function loader({
+  request,
+}: LoaderFunctionArgs): Promise<LoaderData> {
+  const acceptLanguage = request.headers.get('accept-language');
+  let lang: LoaderData['lang'] = 'en';
+
   if (acceptLanguage) {
-    const supported: LoaderData["lang"][] = ["en", "ru"];
-    const preferred = (acceptLanguage.split(",")[0].split("-")[0] || "en") as LoaderData["lang"];
+    const supported: LoaderData['lang'][] = ['en', 'ru'];
+    const preferred = (acceptLanguage.split(',')[0].split('-')[0] ||
+      'en') as LoaderData['lang'];
     if (supported.includes(preferred)) {
       lang = preferred;
     }
@@ -50,7 +55,7 @@ export const links: Route.LinksFunction = () => [
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { lang } = useLoaderData<typeof loader>() || { lang: 'en' };
-  const [i18nInstance, setI18nInstance] = useState<any>(null);
+  const [i18nInstance, setI18nInstance] = useState<I18nType | null>(null);
 
   useEffect(() => {
     const instance = createI18nInstance(lang);
@@ -75,19 +80,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body>
         {i18nInstance ? (
           <I18nextProvider i18n={i18nInstance}>
-            <Header/>
+            <Header />
             {children}
             <Footer />
             <ScrollRestoration />
             <Scripts />
+            <Toaster />
           </I18nextProvider>
         ) : (
           <div>
-            <Header/>
+            <Header />
             {children}
             <Footer />
             <ScrollRestoration />
             <Scripts />
+            <Toaster />
           </div>
         )}
       </body>
@@ -106,9 +113,10 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 
   if (isRouteErrorResponse(error)) {
     message = error.status === 404 ? '404' : 'Error';
-    details = error.status === 404
-      ? 'The requested page could not be found.'
-      : error.statusText || details;
+    details =
+      error.status === 404
+        ? 'The requested page could not be found.'
+        : error.statusText || details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
     stack = error.stack;
