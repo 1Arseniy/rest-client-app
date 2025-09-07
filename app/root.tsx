@@ -5,6 +5,8 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
+  type LoaderFunctionArgs
 } from 'react-router';
 
 import type { Route } from './+types/root';
@@ -14,6 +16,31 @@ import Header from '@/components/header';
 
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import '@/styles/app.css';
+import i18n, {  initI18n } from './i18n';
+import { I18nextProvider } from 'react-i18next';
+import React from 'react';
+
+type LoaderData = {
+  lang: 'en' | 'ru';
+};
+
+
+export async function loader({ request }: LoaderFunctionArgs): Promise<LoaderData> {
+  const acceptLanguage = request.headers.get("accept-language");
+
+  let lang: LoaderData["lang"] = "en";
+  if (acceptLanguage) {
+    const supported: LoaderData["lang"][] = ["en", "ru"];
+    const preferred = (acceptLanguage.split(",")[0].split("-")[0] || "en") as LoaderData["lang"];
+    if (supported.includes(preferred)) {
+      lang = preferred;
+    }
+  }
+
+  await initI18n(lang);
+
+  return { lang };
+}
 
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -29,14 +56,17 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { lang } = useLoaderData<typeof loader>() || { lang: 'en' }; 
+
   return (
-    <html lang="en">
+     <I18nextProvider i18n={i18n}>
+    <html lang={lang}>
       <head>
         <link
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href="./public/favicon/favicon-16x16.png"
+          href="/favicon/favicon-16x16.png"
         />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -44,13 +74,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <Header />
+        <Header/>
         {children}
         <Footer />
         <ScrollRestoration />
         <Scripts />
       </body>
     </html>
+     </I18nextProvider>
+
   );
 }
 
