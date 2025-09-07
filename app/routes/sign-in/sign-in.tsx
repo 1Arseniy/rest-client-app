@@ -2,11 +2,15 @@ import { Input } from '@/components/ui/input/input';
 import { Button } from '@/components/ui/button/button';
 import { Label } from '@/components/ui/label/label';
 import { Link } from 'react-router';
+import { useTranslation } from 'react-i18next';
+
 import { schemaSignin } from '@/validation/validation';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 export default function SignIn() {
+  const { t } = useTranslation();
+  
   const {
     register,
     handleSubmit,
@@ -21,7 +25,7 @@ export default function SignIn() {
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
         <h2 className="mb-6 text-center text-2xl font-bold text-gray-800">
-          Sign In
+          {t('auth.signIn')}
         </h2>
 
         <div className="mb-4">
@@ -29,13 +33,13 @@ export default function SignIn() {
             htmlFor="email"
             className="mb-1 block text-sm font-medium text-gray-700"
           >
-            Your email address
+            {t('form.labels.email')}
           </Label>
           <Input
             {...register('email')}
             id="email"
             type="email"
-            placeholder="Write your email"
+            placeholder={t('form.placeholders.email')}
             className="w-full"
           />
 
@@ -52,13 +56,13 @@ export default function SignIn() {
             htmlFor="password"
             className="mb-1 block text-sm font-medium text-gray-700"
           >
-            Your password
+              {t('form.labels.password')}
           </Label>
           <Input
             {...register('password')}
             id="password"
             type="password"
-            placeholder="Write your password"
+            placeholder={t('form.placeholders.password')}
             className="w-full"
           />
 
@@ -69,19 +73,19 @@ export default function SignIn() {
             {errors.password?.message}
           </div>
         </div>
-
+          
         <Button
           disabled={!isValid}
           onClick={onSubmit}
           variant="outline"
           className="w-full"
         >
-          Sign In
+          {t('auth.signIn')}
         </Button>
 
         <Link to="/sign-up">
           <Button variant="link" className="w-full text-center text-gray-500">
-            Not registered yet? Then sign up!
+            {t('signInRoute.linkToSignUp')}
           </Button>
         </Link>
       </div>

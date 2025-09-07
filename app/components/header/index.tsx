@@ -2,20 +2,13 @@ import { useState, useEffect } from 'react';
 
 import { Link } from 'react-router';
 
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select/select';
-
 import '@/components/header/header.css';
+import LanguageSelect from '../ui/select/LanguageSelect';
+import { useTranslation } from 'react-i18next';
 
 function Header() {
   const [scrollY, setScrollY] = useState(0);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const changeScroll = () => {
@@ -33,29 +26,15 @@ function Header() {
         <Link to="/" className="font-semibold">
           Rest Client
         </Link>
-        <Select defaultValue="En">
-          <SelectTrigger
-            className={`w-[80px] cursor-pointer ${scrollY ? 'text-white' : 'text-black'}`}
-          >
-            <SelectValue defaultValue="En" />
-          </SelectTrigger>
-          <SelectContent
-            className={`${scrollY ? 'text-white bg-black' : 'text-black bg-white'}`}
-          >
-            <SelectGroup>
-              <SelectLabel>language</SelectLabel>
-              <SelectItem value="En">EN</SelectItem>
-              <SelectItem value="Ru">RU</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        
+        <LanguageSelect scrollY={scrollY} />
       </header>
       <div>
         <Link className="hover:underline mr-5" to="/sign-in">
-          Sign In
+           {t('auth.signIn')}
         </Link>
         <Link className="hover:underline" to="/sign-up">
-          Sign Up
+           {t('auth.signUp')}
         </Link>
       </div>
     </div>
