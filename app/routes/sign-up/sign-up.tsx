@@ -1,20 +1,41 @@
 import { Input } from '@/components/ui/input/input';
 import { Button } from '@/components/ui/button/button';
 import { Label } from '@/components/ui/label/label';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { schemaSignup } from '@/validation/validation';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth, registerWithEmailAndPassword } from '../../services/firebase';
+import { useEffect } from 'react';
+
+type SignUpFormData = {
+  email: string;
+  password: string;
+  name: string;
+  passwordRepeat: string;
+};
 
 export default function SignUp() {
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm({
+  } = useForm<SignUpFormData>({
     resolver: yupResolver(schemaSignup),
     mode: 'onChange',
   });
+  const navigate = useNavigate();
+
+  const [user, loading] = useAuthState(auth);
+  useEffect(() => {
+    if (loading) return;
+    if (user) navigate('/');
+  }, [user, loading, navigate]);
+
+  const onSubmit = (data: SignUpFormData) => {
+    registerWithEmailAndPassword(data.name, data.email, data.password);
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
@@ -110,7 +131,12 @@ export default function SignUp() {
           </div>
         </div>
 
-        <Button disabled={!isValid} variant="outline" className="w-full mb-2">
+        <Button
+          disabled={!isValid}
+          onClick={handleSubmit(onSubmit)}
+          variant="outline"
+          className="w-full mb-2"
+        >
           Sign Up
         </Button>
         <Link to="/sign-in">
