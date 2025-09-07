@@ -9,26 +9,30 @@ import { auth, logInWithEmailAndPassword } from '../../services/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useEffect } from 'react';
 
+type SignInFormData = {
+  email: string;
+  password: string;
+};
+
 export default function SignIn() {
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm({
+  } = useForm<SignInFormData>({
     resolver: yupResolver(schemaSignin),
     mode: 'onChange',
   });
-  const [user, loading, error] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const navigate = useNavigate();
   useEffect(() => {
     if (loading) {
-      // maybe trigger a loading screen
       return;
     }
-    if (user) navigate('/dashboard');
+    if (user) navigate('/');
   }, [user, loading, navigate]);
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: SignInFormData) => {
     logInWithEmailAndPassword(data.email, data.password);
   };
   return (
