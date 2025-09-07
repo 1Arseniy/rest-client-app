@@ -15,6 +15,7 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import '@/styles/app.css';
 import { createI18nInstance } from './i18n';
 import { I18nextProvider } from 'react-i18next';
+import type { i18n as I18nType } from "i18next";
 import React, { useEffect, useState } from 'react';
 
 type LoaderData = {
@@ -50,7 +51,7 @@ export const links: Route.LinksFunction = () => [
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { lang } = useLoaderData<typeof loader>() || { lang: 'en' };
-  const [i18nInstance, setI18nInstance] = useState<any>(null);
+  const [i18nInstance, setI18nInstance] = useState<I18nType | null>(null);
 
   useEffect(() => {
     const instance = createI18nInstance(lang);
