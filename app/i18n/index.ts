@@ -1,35 +1,39 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-
 import en from "./locales/en.json";
 import ru from "./locales/ru.json";
 
-let initialized = false;
+let clientI18n: typeof i18n | null = null;
 
-export async function initI18n(lang: "en" | "ru") {
-  if (initialized) {
-    if (i18n.language !== lang) {
-      await i18n.changeLanguage(lang);
-    }
-    return i18n;
+export function createI18nInstance(lang: "en" | "ru" = "en") {
+  if (clientI18n) {
+    clientI18n.changeLanguage(lang);
+    return clientI18n;
   }
 
-  await i18n
-    .use(initReactI18next)
-    .init({
-      resources: {
-        en: { translation: en },
-        ru: { translation: ru },
-      },
-      lng: lang,
-      fallbackLng: "en",
-      supportedLngs: ["en", "ru"],
-      interpolation: { escapeValue: false },
-      react: { useSuspense: false },
-    });
+  clientI18n = i18n.createInstance();
+  
+  clientI18n.use(initReactI18next).init({
+    resources: {
+      en: { translation: en },
+      ru: { translation: ru },
+    },
+    lng: lang,
+    fallbackLng: "en",
+    supportedLngs: ["en", "ru"],
+    interpolation: { escapeValue: false },
+    react: { useSuspense: false },
+  });
 
-  initialized = true;
-  return i18n;
+  return clientI18n;
 }
 
-export default i18n;
+export function getClientI18n() {
+  if (!clientI18n) {
+    return createI18nInstance();
+  }
+  return clientI18n;
+}
+
+const instance = getClientI18n();
+export default instance;
