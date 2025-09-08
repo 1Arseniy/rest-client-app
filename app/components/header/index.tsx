@@ -2,22 +2,15 @@ import { useState, useEffect } from 'react';
 
 import { Link } from 'react-router';
 
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select/select';
-
 import '@/components/header/header.css';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, logout } from '@/services/firebase';
+import LanguageSelect from '../ui/select/LanguageSelect';
+import { useTranslation } from 'react-i18next';
 
 function Header() {
   const [scrollY, setScrollY] = useState(0);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const changeScroll = () => {
@@ -41,22 +34,8 @@ function Header() {
         <Link to="/" className="font-semibold">
           Rest Client
         </Link>
-        <Select defaultValue="En">
-          <SelectTrigger
-            className={`w-[80px] cursor-pointer ${scrollY ? 'text-white' : 'text-black'}`}
-          >
-            <SelectValue defaultValue="En" />
-          </SelectTrigger>
-          <SelectContent
-            className={`${scrollY ? 'text-white bg-black' : 'text-black bg-white'}`}
-          >
-            <SelectGroup>
-              <SelectLabel>language</SelectLabel>
-              <SelectItem value="En">EN</SelectItem>
-              <SelectItem value="Ru">RU</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+
+        <LanguageSelect scrollY={scrollY} />
       </header>
       {user ? (
         <Link onClick={handleClick} className="hover:underline mr-5" to="/">

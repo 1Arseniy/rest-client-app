@@ -1,0 +1,35 @@
+{
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up"
+  },
+  "header": {
+    "languageLabel": "language",
+    "language": "EN"
+  },
+  "mainRoute": {
+    "welcomePanel": {
+      "welcome": "Welcome"
+    }
+  },
+  "form": {
+    "labels": {
+      "name": "Your Name",
+      "email": "Your email address",
+      "password": "Your password",
+      "repeatPassword": "Repeat password"
+    },
+    "placeholders": {
+      "name": "Write your name",
+      "email": "Write your email",
+      "password": "Write your password",
+      "repeatPassword": "Repeat your password"
+    }
+  },
+  "signInRoute": {
+    "linkToSignUp": "Not registered yet? Then sign up!"
+  },
+  "signUpRoute": {
+    "linkToSignIn": "Already signed up? Then sign in!"
+  }
+}
