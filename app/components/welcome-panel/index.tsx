@@ -5,7 +5,7 @@ function WelcomePanel() {
   const { t } = useTranslation();
 
   return (
-    <div>
+    <div className="">
       <h1 className="text-center text-3xl mb-2">
         {t('mainRoute.welcomePanel.welcome')}!
       </h1>
@@ -15,6 +15,17 @@ function WelcomePanel() {
         </Link>
         <Link className="hover:underline" to="/sign-up">
           {t('auth.signUp')}
+        </Link>
+      </div>
+      <div className="mt-10">
+        <Link className="hover:underline mr-4" to={'/rest-client'}>
+          {t('auth.restClient')}
+        </Link>
+        <Link className="hover:underline mr-4" to={''}>
+          {t('auth.history')}
+        </Link>
+        <Link className="hover:underline" to={''}>
+          {t('auth.variables')}
         </Link>
       </div>
     </div>

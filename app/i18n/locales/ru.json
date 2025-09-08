@@ -1,7 +1,10 @@
 {
   "auth": {
     "signIn": "Войти",
-    "signUp": "Зарегистрироваться"
+    "signUp": "Зарегистрироваться",
+    "restClient": "Rest-клиент",
+    "variables": "Переменные",
+    "history": "История"
   },
   "header": {
     "languageLabel": "язык",
