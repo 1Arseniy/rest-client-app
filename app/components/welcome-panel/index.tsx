@@ -10,7 +10,7 @@ function WelcomePanel() {
         {t('mainRoute.welcomePanel.welcome')}!
       </h1>
       <div className="text-center">
-        <Link className="hover:underline mr-2" to="/sign-in">
+        <Link className="hover:underline mr-6" to="/sign-in">
           {t('auth.signIn')}
         </Link>
         <Link className="hover:underline" to="/sign-up">
