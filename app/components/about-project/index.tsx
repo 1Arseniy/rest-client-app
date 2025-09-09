@@ -8,7 +8,7 @@ import logoTS from '@/assets/images/project-tools/typescript.svg';
 import logoVite from '@/assets/images/project-tools/vite.svg';
 import { useTranslation } from 'react-i18next';
 
-const logos = [
+export const logos = [
   logoEslint,
   logPrettier,
   logoReactRouter,
