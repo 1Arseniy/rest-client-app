@@ -20,6 +20,7 @@ type SignUpFormData = {
 export default function SignUp() {
   const { t } = useTranslation();
   const {
+    handleSubmit,
     register,
     formState: { errors, isValid },
   } = useForm<SignUpFormData>({
@@ -137,7 +138,7 @@ export default function SignUp() {
           variant="outline"
           className="w-full mb-2"
         >
-        {t('auth.signUp')}
+          {t('auth.signUp')}
         </Button>
         <Link to="/sign-in">
           <Button variant="link" className="w-full text-center text-gray-500">

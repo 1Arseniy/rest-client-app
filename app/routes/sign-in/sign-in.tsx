@@ -19,6 +19,7 @@ export default function SignIn() {
   const { t } = useTranslation();
 
   const {
+    handleSubmit,
     register,
     formState: { errors, isValid },
   } = useForm<SignInFormData>({
@@ -96,7 +97,7 @@ export default function SignIn() {
           variant="outline"
           className="w-full"
         >
-         {t('auth.signIn')}
+          {t('auth.signIn')}
         </Button>
 
         <Link to="/sign-up">

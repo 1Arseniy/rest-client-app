@@ -4,8 +4,9 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
+  updateProfile,
 } from 'firebase/auth';
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { getFirestore, setDoc, doc } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAqbgEqacnW2Bt8gNT1dYSs6dTvID1SNP0',
@@ -43,11 +44,14 @@ const registerWithEmailAndPassword = async (
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password);
     const user = res.user;
-    await addDoc(collection(db, 'users'), {
+    await updateProfile(user, { displayName: name });
+
+    await setDoc(doc(db, 'users', user.uid), {
       uid: user.uid,
       name,
       authProvider: 'local',
       email,
+      createdAt: Date.now(),
     });
   } catch (err: unknown) {
     if (err instanceof FirebaseError) {
