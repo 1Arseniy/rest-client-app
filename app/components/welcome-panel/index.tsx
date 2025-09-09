@@ -1,6 +1,5 @@
 import { auth } from '@/services/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
-
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 
@@ -12,7 +11,6 @@ function WelcomePanel() {
     <div className="mt-2.5">
       {!user ? (
         <>
-          {' '}
           <h1 className="text-center text-3xl mb-2">
             {t('mainRoute.welcomePanel.welcome')}!
           </h1>
@@ -23,11 +21,11 @@ function WelcomePanel() {
             <Link className="hover:underline" to="/sign-up">
               {t('auth.signUp')}
             </Link>
-          </div>{' '}
+          </div>
         </>
       ) : (
         <h1 className="text-center text-3xl mb-2">
-          {t('mainRoute.welcomePanel.welcomeBack')}, [{user.email}]!
+          {t('mainRoute.welcomePanel.welcomeBack')}, [{user?.displayName}]!
         </h1>
       )}
     </div>

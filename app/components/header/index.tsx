@@ -11,7 +11,6 @@ import { useTranslation } from 'react-i18next';
 function Header() {
   const [scrollY, setScrollY] = useState(0);
   const { t } = useTranslation();
-
   useEffect(() => {
     const changeScroll = () => {
       setScrollY(window.scrollY);
