@@ -6,11 +6,9 @@ import '@/components/header/header.css';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, logout } from '@/services/firebase';
 import LanguageSelect from '../ui/select/LanguageSelect';
-import { useTranslation } from 'react-i18next';
 
 function Header() {
   const [scrollY, setScrollY] = useState(0);
-  const { t } = useTranslation();
 
   useEffect(() => {
     const changeScroll = () => {
