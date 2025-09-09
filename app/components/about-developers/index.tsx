@@ -10,39 +10,48 @@ import {
 import { developersLinks } from '@/config/developers';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 
 const developers = [
   {
-    name: 'Arseniy',
-    description:
-      "Hello my name is Arseniy, I'm from Belarus, Gomel. In this app I make Login page, User profile page, partially Cart page. Also I helped Stanislav with Catalog page. I can confidently say that I learned a lot at rs-school",
+    keyName: 'nameArseniy',
+    keyDescription: 'arseniy',
     gitHub: developersLinks[0],
   },
   {
-    name: 'Regina',
-    description:
-      'Frontend web developer, with over a year of commercial experience. She completed courses from RSS and knows how to create web applications on Vue, React, as well as Native TypeScript & JavaScript. And in life, she loves creativity and drawing',
+    keyName: 'nameRegina',
+    keyDescription: 'regina',
     gitHub: developersLinks[2],
   },
   {
-    name: 'Ksenia',
-    description: 'some text',
+    keyName: 'nameKsenia',
+    keyDescription: 'ksenia',
     gitHub: developersLinks[1],
   },
 ];
 
 function AboutDevelopers() {
+  const { t } = useTranslation();
   return (
     <div>
-      <h1 className="text-3xl mb-2.5 text-center ">About the developers:</h1>
+      <h1 className="text-3xl mb-2.5 text-center">
+        {t('mainRoute.aboutDevelopers.title')}:
+      </h1>
       <div className="flex flex-wrap justify-center">
         {developers.map((developer) => (
-          <Card key={developer.name} className="max-w-sm m-2.5">
+          <Card
+            key={developer.keyName}
+            className="max-w-sm m-2.5 justify-between"
+          >
             <CardHeader>
-              <CardTitle>{developer.name}</CardTitle>
+              <CardTitle>
+                {t(`mainRoute.aboutDevelopers.${developer.keyName}`)}
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <CardDescription>{developer.description}</CardDescription>
+              <CardDescription>
+                {t(`mainRoute.aboutDevelopers.${developer.keyDescription}`)}
+              </CardDescription>
             </CardContent>
             <CardFooter>
               <a className="m-1" href={developer.gitHub}>

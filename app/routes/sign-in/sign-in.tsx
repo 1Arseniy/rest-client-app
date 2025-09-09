@@ -20,6 +20,7 @@ export default function SignIn() {
 
   const {
     register,
+    handleSubmit,
     formState: { errors, isValid },
   } = useForm<SignInFormData>({
     resolver: yupResolver(schemaSignin),
@@ -96,7 +97,7 @@ export default function SignIn() {
           variant="outline"
           className="w-full"
         >
-         {t('auth.signIn')}
+          {t('auth.signIn')}
         </Button>
 
         <Link to="/sign-up">

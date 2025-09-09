@@ -39,15 +39,15 @@ function Header() {
       </header>
       {user ? (
         <Link onClick={handleClick} className="hover:underline mr-5" to="/">
-          Sign Out
+          {t('auth.signOut')}
         </Link>
       ) : (
         <div>
           <Link className="hover:underline mr-5" to="/sign-in">
-            Sign In
+            {t('auth.signIn')}
           </Link>
           <Link className="hover:underline" to="/sign-up">
-            Sign Up
+            {t('auth.signUp')}
           </Link>
         </div>
       )}

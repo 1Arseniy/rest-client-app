@@ -21,6 +21,7 @@ export default function SignUp() {
   const { t } = useTranslation();
   const {
     register,
+    handleSubmit,
     formState: { errors, isValid },
   } = useForm<SignUpFormData>({
     resolver: yupResolver(schemaSignup),
@@ -137,7 +138,7 @@ export default function SignUp() {
           variant="outline"
           className="w-full mb-2"
         >
-        {t('auth.signUp')}
+          {t('auth.signUp')}
         </Button>
         <Link to="/sign-in">
           <Button variant="link" className="w-full text-center text-gray-500">

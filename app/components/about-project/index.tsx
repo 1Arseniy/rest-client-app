@@ -6,6 +6,7 @@ import logoShadcn from '@/assets/images/project-tools/shadcn.svg';
 import logoTawlind from '@/assets/images/project-tools/tawlind.svg';
 import logoTS from '@/assets/images/project-tools/typescript.svg';
 import logoVite from '@/assets/images/project-tools/vite.svg';
+import { useTranslation } from 'react-i18next';
 
 const logos = [
   logoEslint,
@@ -19,10 +20,11 @@ const logos = [
 ];
 
 function AboutProject() {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col">
       <h1 className="text-center text-3xl mb-2.5">
-        Some of the tools we used:
+        {t('mainRoute.aboutProject')}:
       </h1>
       <div className="flex flex-wrap justify-center">
         {logos.map((logo) => (

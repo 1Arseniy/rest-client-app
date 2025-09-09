@@ -1,6 +1,7 @@
 import WelcomePanel from '@/components/welcome-panel/index';
 import AboutProject from '@/components/about-project';
 import AboutDevelopers from '@/components/about-developers';
+import AboutRSSReact from '@/components/about-rss-react';
 
 export function meta() {
   return [
@@ -11,10 +12,11 @@ export function meta() {
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-around bg-gray-50">
+    <div className="min-h-screen flex flex-col items-center justify-around gap-32 bg-gray-50">
       <WelcomePanel />
       <AboutProject />
       <AboutDevelopers />
+      <AboutRSSReact />
     </div>
   );
 }
