@@ -2,6 +2,7 @@
   "auth": {
     "signIn": "Sign In",
     "signUp": "Sign Up",
+    "guest": "User",
     "signOut": "Sign Out",
     "restClient": "Rest Client",
     "variables": "Variables",

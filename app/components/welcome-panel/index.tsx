@@ -1,11 +1,12 @@
 import { auth } from '@/services/firebase';
-import { useAuthState } from 'react-firebase-hooks/auth';
+
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
+import { useIdToken } from 'react-firebase-hooks/auth';
 
 function WelcomePanel() {
   const { t } = useTranslation();
-  const [user] = useAuthState(auth);
+  const [user] = useIdToken(auth);
 
   return (
     <div className="mt-2.5">
@@ -26,7 +27,8 @@ function WelcomePanel() {
       ) : (
         <>
           <h1 className="text-center text-3xl mb-2">
-            {t('mainRoute.welcomePanel.welcomeBack')}, [{user?.displayName}]!
+            {t('mainRoute.welcomePanel.welcomeBack')}, [
+            {user?.displayName ?? t('auth.guest')}]!
           </h1>
           <div className="mt-10 text-center">
             <Link className="hover:underline mr-4" to={'/rest-client'}>
