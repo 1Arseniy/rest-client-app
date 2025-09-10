@@ -2,7 +2,11 @@
   "auth": {
     "signIn": "Sign In",
     "signUp": "Sign Up",
-    "signOut": "Sign Out"
+    "signOut": "Sign Out",
+    "restClient": "Rest Client",
+    "variables": "Variables",
+    "mainPage": "Main page",
+    "history": "History"
   },
   "header": {
     "languageLabel": "language",

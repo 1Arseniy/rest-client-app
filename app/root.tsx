@@ -20,7 +20,9 @@ import type { i18n as I18nType } from 'i18next';
 import React, { useEffect, useState } from 'react';
 import { Toaster } from 'sonner';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth, logout } from '@/services/firebase';
+import { auth } from '@/services/firebase';
+
+import { onIdTokenChanged } from 'firebase/auth';
 
 type LoaderData = {
   lang: 'en' | 'ru';
@@ -63,18 +65,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    (async () => {
-      const instance = createI18nInstance(lang);
-      setI18nInstance(instance);
-      document.documentElement.lang = lang;
-      try {
-        await user?.getIdToken();
-      } catch {
-        logout();
+    const instance = createI18nInstance(lang);
+    setI18nInstance(instance);
+    document.documentElement.lang = lang;
+
+    const token = onIdTokenChanged(auth, (user) => {
+      if (!user) {
         navigate('/');
       }
-    })();
-  }, [lang, user]);
+    });
+    return () => token();
+  }, [lang, user, navigate]);
 
   return (
     <html lang={lang}>

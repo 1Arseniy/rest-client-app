@@ -37,9 +37,14 @@ function Header() {
         <LanguageSelect scrollY={scrollY} />
       </header>
       {user ? (
-        <Link onClick={handleClick} className="hover:underline mr-5" to="/">
-          {t('auth.signOut')}
-        </Link>
+        <div>
+          <Link className="hover:underline mr-5" to="/">
+            {t('auth.mainPage')}
+          </Link>
+          <Link onClick={handleClick} className="hover:underline mr-5" to="/">
+            {t('auth.signOut')}
+          </Link>
+        </div>
       ) : (
         <div>
           <Link className="hover:underline mr-5" to="/sign-in">

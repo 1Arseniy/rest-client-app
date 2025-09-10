@@ -14,7 +14,7 @@ function WelcomePanel() {
           <h1 className="text-center text-3xl mb-2">
             {t('mainRoute.welcomePanel.welcome')}!
           </h1>
-          <div className="text-center">
+          <div className="mt-10 text-center">
             <Link className="hover:underline mr-6" to="/sign-in">
               {t('auth.signIn')}
             </Link>
@@ -24,9 +24,22 @@ function WelcomePanel() {
           </div>
         </>
       ) : (
-        <h1 className="text-center text-3xl mb-2">
-          {t('mainRoute.welcomePanel.welcomeBack')}, [{user?.displayName}]!
-        </h1>
+        <>
+          <h1 className="text-center text-3xl mb-2">
+            {t('mainRoute.welcomePanel.welcomeBack')}, [{user?.displayName}]!
+          </h1>
+          <div className="mt-10 text-center">
+            <Link className="hover:underline mr-4" to={'/rest-client'}>
+              {t('auth.restClient')}
+            </Link>
+            <Link className="hover:underline mr-4" to={''}>
+              {t('auth.history')}
+            </Link>
+            <Link className="hover:underline" to={''}>
+              {t('auth.variables')}
+            </Link>
+          </div>
+        </>
       )}
     </div>
   );

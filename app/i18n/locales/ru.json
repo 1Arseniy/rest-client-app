@@ -2,7 +2,11 @@
   "auth": {
     "signIn": "Войти",
     "signUp": "Зарегистрироваться",
-    "signOut": "Выйти"
+    "signOut": "Выйти",
+    "restClient": "Rest-клиент",
+    "variables": "Переменные",
+    "mainPage": "Главная страница",
+    "history": "История"
   },
   "header": {
     "languageLabel": "язык",
