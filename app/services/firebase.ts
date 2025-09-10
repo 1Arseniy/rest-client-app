@@ -24,7 +24,10 @@ const db = getFirestore(app);
 
 const logInWithEmailAndPassword = async (email: string, password: string) => {
   try {
-    await signInWithEmailAndPassword(auth, email, password);
+    const res = await signInWithEmailAndPassword(auth, email, password);
+    const user = res.user;
+    await user.reload();
+    await user.getIdToken(true);
   } catch (err: unknown) {
     if (err instanceof FirebaseError) {
       console.error(err.code, err.message);
@@ -44,7 +47,10 @@ const registerWithEmailAndPassword = async (
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password);
     const user = res.user;
-    await updateProfile(user, { displayName: name });
+    await updateProfile(res.user, { displayName: name });
+
+    await user.reload();
+    await user.getIdToken(true);
 
     await setDoc(doc(db, 'users', user.uid), {
       uid: user.uid,

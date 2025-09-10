@@ -1,7 +1,8 @@
 {
   "auth": {
     "signIn": "Sign In",
-    "signUp": "Sign Up"
+    "signUp": "Sign Up",
+    "guest": "User"
   },
   "header": {
     "languageLabel": "language",
