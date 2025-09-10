@@ -20,8 +20,8 @@ type SignUpFormData = {
 export default function SignUp() {
   const { t } = useTranslation();
   const {
-    handleSubmit,
     register,
+    handleSubmit,
     formState: { errors, isValid },
   } = useForm<SignUpFormData>({
     resolver: yupResolver(schemaSignup),

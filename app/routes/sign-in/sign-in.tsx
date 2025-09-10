@@ -19,8 +19,8 @@ export default function SignIn() {
   const { t } = useTranslation();
 
   const {
-    handleSubmit,
     register,
+    handleSubmit,
     formState: { errors, isValid },
   } = useForm<SignInFormData>({
     resolver: yupResolver(schemaSignin),

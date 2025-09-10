@@ -22,6 +22,7 @@ export function showSonner(
   }[type];
 
   toastMethod(title, {
+    position: 'top-center',
     description,
     className: colorClass,
     action: {
