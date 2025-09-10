@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 
 import Footer from '@/components/footer/index';
 
-import { developers } from '@/config/developers';
+import { developersLinks } from '@/config/developers';
 
 import '@testing-library/jest-dom/vitest';
 
@@ -17,7 +17,7 @@ describe('tests Footer', () => {
     screen
       .getAllByRole('link')
       .forEach((link, i) =>
-        expect(link).toHaveAttribute('href', developers[i])
+        expect(link).toHaveAttribute('href', developersLinks[i])
       );
   });
 

@@ -9,19 +9,40 @@ function WelcomePanel() {
   const [user] = useIdToken(auth);
 
   return (
-    <div>
-      <h1 className="text-center text-3xl mb-2">
-        {t('mainRoute.welcomePanel.welcome')},{' '}
-        {user?.displayName ?? t('auth.guest')}!
-      </h1>
-      <div className="text-center">
-        <Link className="hover:underline mr-2" to="/sign-in">
-          {t('auth.signIn')}
-        </Link>
-        <Link className="hover:underline" to="/sign-up">
-          {t('auth.signUp')}
-        </Link>
-      </div>
+    <div className="mt-2.5">
+      {!user ? (
+        <>
+          <h1 className="text-center text-3xl mb-2">
+            {t('mainRoute.welcomePanel.welcome')}!
+          </h1>
+          <div className="mt-10 text-center">
+            <Link className="hover:underline mr-6" to="/sign-in">
+              {t('auth.signIn')}
+            </Link>
+            <Link className="hover:underline" to="/sign-up">
+              {t('auth.signUp')}
+            </Link>
+          </div>
+        </>
+      ) : (
+        <>
+          <h1 className="text-center text-3xl mb-2">
+            {t('mainRoute.welcomePanel.welcomeBack')}, [
+            {user?.displayName ?? t('auth.guest')}]!
+          </h1>
+          <div className="mt-10 text-center">
+            <Link className="hover:underline mr-4" to={'/rest-client'}>
+              {t('auth.restClient')}
+            </Link>
+            <Link className="hover:underline mr-4" to={''}>
+              {t('auth.history')}
+            </Link>
+            <Link className="hover:underline" to={''}>
+              {t('auth.variables')}
+            </Link>
+          </div>
+        </>
+      )}
     </div>
   );
 }

@@ -8,6 +8,8 @@ import {
 } from 'firebase/auth';
 import { getFirestore, setDoc, doc } from 'firebase/firestore';
 
+import { showSonner } from '@/components/ui/sonner/sonner';
+
 const firebaseConfig = {
   apiKey: 'AIzaSyAqbgEqacnW2Bt8gNT1dYSs6dTvID1SNP0',
   authDomain: 'ksenia-f3f87.firebaseapp.com',
@@ -30,11 +32,9 @@ const logInWithEmailAndPassword = async (email: string, password: string) => {
     await user.getIdToken(true);
   } catch (err: unknown) {
     if (err instanceof FirebaseError) {
-      console.error(err.code, err.message);
-      alert(err.message);
+      showSonner('Error', err.message, 'error');
     } else {
-      console.error(err);
-      alert('An unexpected error occurred');
+      showSonner('Error', 'An unexpected error occurred', 'error');
     }
   }
 };
@@ -61,11 +61,9 @@ const registerWithEmailAndPassword = async (
     });
   } catch (err: unknown) {
     if (err instanceof FirebaseError) {
-      console.error(err.code, err.message);
-      alert(err.message);
+      showSonner('Error', err.message, 'error');
     } else {
-      console.error(err);
-      alert('An unexpected error occurred');
+      showSonner('Error', 'An unexpected error occurred', 'error');
     }
   }
 };

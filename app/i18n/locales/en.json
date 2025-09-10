@@ -2,7 +2,12 @@
   "auth": {
     "signIn": "Sign In",
     "signUp": "Sign Up",
-    "guest": "User"
+    "guest": "User",
+    "signOut": "Sign Out",
+    "restClient": "Rest Client",
+    "variables": "Variables",
+    "mainPage": "Main page",
+    "history": "History"
   },
   "header": {
     "languageLabel": "language",
@@ -10,7 +15,21 @@
   },
   "mainRoute": {
     "welcomePanel": {
-      "welcome": "Welcome"
+      "welcome": "Welcome",
+      "welcomeBack": "Welcome Back"
+    },
+    "aboutProject": "Some of the tools we used",
+    "aboutDevelopers": {
+      "title": "About the developers",
+      "nameArseniy": "Arseniy",
+      "arseniy": "Hello my name is Arseniy, I'm from Belarus, Gomel. I can confidently say that I learned a lot at rs-school",
+      "nameRegina": "Regina",
+      "regina": "Frontend web developer, with over a year of commercial experience. She completed courses from RSS and knows how to create web applications on Vue, React, as well as Native TypeScript & JavaScript. And in life, she loves creativity and drawing",
+      "nameKsenia": "Ksenia",
+      "ksenia": "I’m a Frontend Engineer with a passion for crafting intuitive, high-quality user interfaces. A precise learner with a sharp eye for detail, loving solving complex problems, and seeing the immediate impact of well-executed code. I’m driven by the challenge of turning ideas into responsive, performant, and visually compelling applications."
+    },
+    "aboutRSSReact": {
+      "title": "About RSS React course"
     }
   },
   "form": {

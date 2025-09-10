@@ -3,7 +3,7 @@ import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 import rssLogo from '@/assets/images/rss-logo.svg';
 
-import { developers } from '@/config/developers';
+import { developersLinks } from '@/config/developers';
 
 import '@/components/Footer/Footer.css';
 
@@ -11,7 +11,7 @@ function Footer() {
   return (
     <footer className="p-1 flex items-center justify-around footer">
       <div className="flex gap-1">
-        {developers.map((developer) => (
+        {developersLinks.map((developer) => (
           <a className="m-1" key={developer} href={developer}>
             <FontAwesomeIcon size="2x" icon={faGithub} />
           </a>
