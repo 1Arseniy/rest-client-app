@@ -3,13 +3,14 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
 
 import '@/components/header/header.css';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth, logout } from '@/services/firebase';
 import LanguageSelect from '../ui/select/LanguageSelect';
 import { useTranslation } from 'react-i18next';
 
 function Header() {
   const [scrollY, setScrollY] = useState(0);
   const { t } = useTranslation();
-
   useEffect(() => {
     const changeScroll = () => {
       setScrollY(window.scrollY);
@@ -17,6 +18,12 @@ function Header() {
     window.addEventListener('scroll', changeScroll);
     return () => window.removeEventListener('scroll', changeScroll);
   }, [setScrollY]);
+
+  const [user] = useAuthState(auth);
+
+  const handleClick = () => {
+    logout();
+  };
 
   return (
     <div
@@ -29,14 +36,25 @@ function Header() {
 
         <LanguageSelect scrollY={scrollY} />
       </header>
-      <div>
-        <Link className="hover:underline mr-5" to="/sign-in">
-          {t('auth.signIn')}
-        </Link>
-        <Link className="hover:underline" to="/sign-up">
-          {t('auth.signUp')}
-        </Link>
-      </div>
+      {user ? (
+        <div>
+          <Link className="hover:underline mr-5" to="/">
+            {t('auth.mainPage')}
+          </Link>
+          <Link onClick={handleClick} className="hover:underline mr-5" to="/">
+            {t('auth.signOut')}
+          </Link>
+        </div>
+      ) : (
+        <div>
+          <Link className="hover:underline mr-5" to="/sign-in">
+            {t('auth.signIn')}
+          </Link>
+          <Link className="hover:underline" to="/sign-up">
+            {t('auth.signUp')}
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

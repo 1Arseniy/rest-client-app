@@ -18,10 +18,12 @@ describe('tests WelcomePanel', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText(i18n.t('mainRoute.welcomePanel.welcome') + '!')).toBeInTheDocument();
+    expect(
+      screen.getByText(i18n.t('mainRoute.welcomePanel.welcome') + '!')
+    ).toBeInTheDocument();
 
-    screen.getAllByRole('link').forEach((link, i) =>
-      expect(link).toHaveAttribute('href', paths[i])
-    );
+    screen
+      .getAllByRole('link')
+      .forEach((link, i) => expect(link).toHaveAttribute('href', paths[i]));
   });
 });

@@ -1,23 +1,43 @@
 import { Input } from '@/components/ui/input/input';
 import { Button } from '@/components/ui/button/button';
 import { Label } from '@/components/ui/label/label';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
-
 import { schemaSignin } from '@/validation/validation';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { auth, logInWithEmailAndPassword } from '../../services/firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useEffect } from 'react';
+
+type SignInFormData = {
+  email: string;
+  password: string;
+};
 
 export default function SignIn() {
   const { t } = useTranslation();
 
   const {
     register,
+    handleSubmit,
     formState: { errors, isValid },
-  } = useForm({
+  } = useForm<SignInFormData>({
     resolver: yupResolver(schemaSignin),
     mode: 'onChange',
   });
+  const [user, loading] = useAuthState(auth);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (loading) {
+      return;
+    }
+    if (user) navigate('/');
+  }, [user, loading, navigate]);
+
+  const onSubmit = (data: SignInFormData) => {
+    logInWithEmailAndPassword(data.email, data.password);
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
@@ -71,8 +91,12 @@ export default function SignIn() {
             {errors.password?.message}
           </div>
         </div>
-
-        <Button disabled={!isValid} variant="outline" className="w-full">
+        <Button
+          disabled={!isValid}
+          onClick={handleSubmit(onSubmit)}
+          variant="outline"
+          className="w-full"
+        >
           {t('auth.signIn')}
         </Button>
 
