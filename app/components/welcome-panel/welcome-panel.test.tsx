@@ -19,7 +19,9 @@ describe('tests WelcomePanel', () => {
     );
 
     expect(
-      screen.getByText(i18n.t('mainRoute.welcomePanel.welcome') + ', ' + '!')
+      screen.getByText(
+        i18n.t('mainRoute.welcomePanel.welcome') + ', User' + '!'
+      )
     ).toBeInTheDocument();
 
     screen
