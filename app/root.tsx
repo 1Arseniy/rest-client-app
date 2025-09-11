@@ -7,7 +7,6 @@ import {
   ScrollRestoration,
   useLoaderData,
   type LoaderFunctionArgs,
-  useNavigate,
 } from 'react-router';
 import type { Route } from './+types/root';
 import Footer from '@/components/footer';
@@ -19,10 +18,6 @@ import { I18nextProvider } from 'react-i18next';
 import type { i18n as I18nType } from 'i18next';
 import React, { useEffect, useState } from 'react';
 import { Toaster } from 'sonner';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '@/services/firebase';
-
-import { onIdTokenChanged } from 'firebase/auth';
 
 type LoaderData = {
   lang: 'en' | 'ru';
@@ -61,21 +56,12 @@ export const links: Route.LinksFunction = () => [
 export function Layout({ children }: { children: React.ReactNode }) {
   const { lang } = useLoaderData<typeof loader>() || { lang: 'en' };
   const [i18nInstance, setI18nInstance] = useState<I18nType | null>(null);
-  const [user] = useAuthState(auth);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const instance = createI18nInstance(lang);
     setI18nInstance(instance);
     document.documentElement.lang = lang;
-
-    const token = onIdTokenChanged(auth, (user) => {
-      if (!user) {
-        navigate('/');
-      }
-    });
-    return () => token();
-  }, [lang, user, navigate]);
+  }, [lang]);
 
   return (
     <html lang={lang}>
