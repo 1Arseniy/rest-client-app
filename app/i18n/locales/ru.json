@@ -2,6 +2,7 @@
   "auth": {
     "signIn": "Войти",
     "signUp": "Зарегистрироваться",
+    "guest": "Пользователь",
     "signOut": "Выйти",
     "restClient": "Rest-клиент",
     "variables": "Переменные",
