@@ -7,6 +7,7 @@ import {
   ScrollRestoration,
   useLoaderData,
   type LoaderFunctionArgs,
+  Link,
 } from 'react-router';
 import type { Route } from './+types/root';
 import Footer from '@/components/footer';
@@ -14,7 +15,7 @@ import Header from '@/components/header';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import '@/styles/app.css';
 import { createI18nInstance } from './i18n';
-import { I18nextProvider } from 'react-i18next';
+import { I18nextProvider, useTranslation } from 'react-i18next';
 import type { i18n as I18nType } from 'i18next';
 import React, { useEffect, useState } from 'react';
 import { Toaster } from 'sonner';
@@ -107,6 +108,7 @@ export default function App() {
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+  const { t } = useTranslation();
   let message = 'Oops!';
   let details = 'An unexpected error occurred.';
   let stack: string | undefined;
@@ -114,18 +116,21 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   if (isRouteErrorResponse(error)) {
     message = error.status === 404 ? '404' : 'Error';
     details =
-      error.status === 404
-        ? 'The requested page could not be found.'
-        : error.statusText || details;
+      error.status === 404 ? t('page404.message') : error.statusText || details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
     stack = error.stack;
   }
 
   return (
-    <main className="pt-16 p-4 container mx-auto h-screen flex justify-center items-center">
-      <h1>{message}</h1>
-      <p>{details}</p>
+    <main className="pt-16 p-4 container mx-auto h-screen flex flex-col justify-center items-center">
+      <div className="mb-3">
+        <h1 className="text-4xl mb-2 text-center">{message}</h1>
+        <p className="text-3xl">{details}</p>
+      </div>
+      <Link className="hover:underline text-3xl" to="/">
+        {t('page404.toMain')}
+      </Link>
       {stack && (
         <pre className="w-full p-4 overflow-x-auto">
           <code>{stack}</code>

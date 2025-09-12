@@ -1,22 +1,25 @@
-// 'use server';
+import type { TypeResponse } from '@/types/types';
 
-export async function getData(method: string, url: string) {
+export async function getData(
+  method: string,
+  url: string
+): Promise<TypeResponse> {
   try {
     const response = await fetch(url, {
       method,
     });
     if (!response.ok) {
-      //   console.log('status', response.status);
-      const text = await response.text();
-      throw new Error(`Error ${response.status}: ${text}`);
+      return {
+        status: `${response.status} ${response.statusText}`,
+        error: await response.text(),
+      };
     }
-    const data = await response.json();
-    console.log(data);
-    return data;
+    const data = JSON.stringify(await response.json(), null, 8);
+    return { status: `${response.status} ${response.statusText}`, data };
   } catch (err) {
     if (err instanceof Error) {
-      console.log(err.message);
-      return err;
+      return { status: '', error: err.message };
     }
   }
+  return { status: '' };
 }

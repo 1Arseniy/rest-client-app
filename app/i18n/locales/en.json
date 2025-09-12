@@ -57,6 +57,14 @@
       "method": "method",
       "url": "Enter URL",
       "send": "send"
+    },
+    "responsePanel": {
+      "title": "Response",
+      "status": "Status"
     }
+  },
+  "page404": {
+    "toMain": "To main page",
+    "message": "The requested page could not be found"
   }
 }
