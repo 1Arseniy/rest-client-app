@@ -4,7 +4,8 @@ import { Label } from '@/components/ui/label/label';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Separator } from '@/components/ui/separator';
 
 type VariableItem = {
   variable: string;
@@ -16,10 +17,14 @@ export default function Variables() {
   const [variable, setVariable] = useState('');
   const [value, setValue] = useState('');
 
-  const [variables, setVariables] = useState<VariableItem[]>([]);
+  const [variables, setVariables] = useState<VariableItem[]>(
+    JSON.parse(localStorage.getItem('array') || '[]s')
+  );
 
   const handleAdd = () => {
     setVariables([...variables, { variable: variable, value: value }]);
+    setVariable('');
+    setValue('');
   };
   const handleVariableChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setVariable(e.target.value);
@@ -28,14 +33,63 @@ export default function Variables() {
     setValue(e.target.value);
   };
 
-  const handleDelete = () => {
-    setVariable('');
-    setValue('');
+  const handleCurrentDelete = (variableKey: string) => {
+    const array = [];
+    for (let i = 0; i < variables.length; i++) {
+      if (variables[i].variable !== variableKey) {
+        array.push(variables[i]);
+      }
+    }
+    setVariables(array);
   };
 
-  /// draft to check my code
+  const handleDeleteAll = () => {
+    setVariables([]);
+    setValue('');
+    setVariable('');
+  };
+
+  useEffect(() => {
+    localStorage.setItem('array', JSON.stringify(variables));
+  }, [variables]);
+
   const listVriableItems = variables.map((variable) => (
-    <div key={variable.variable}>{variable.variable}</div>
+    <div key={variable.variable} className="mb-6 flex flex-row items-end gap-4">
+      <div className="flex flex-col flex-1">
+        <Input
+          value={variable.variable}
+          onChange={handleVariableChange}
+          id="variable"
+          type="text"
+          placeholder={t('variables.variablePlaceholder')}
+          className="w-full"
+        />
+      </div>
+
+      <div className="flex flex-col flex-1">
+        <Input
+          value={variable.value}
+          onChange={handleValueChange}
+          id="value"
+          type="text"
+          placeholder={t('variables.valuePlaceholder')}
+          className="w-full"
+        />
+      </div>
+
+      <div className="flex items-center">
+        <Button
+          onClick={() => {
+            handleCurrentDelete(variable.variable);
+          }}
+          type="button"
+          variant="ghost"
+          className="p-2 text-gray-500 hover:text-red-600"
+        >
+          <FontAwesomeIcon icon={faTrash} />
+        </Button>
+      </div>
+    </div>
   ));
   return (
     <>
@@ -80,11 +134,9 @@ export default function Variables() {
               />
             </div>
 
-            <div> {listVriableItems}</div>
-
             <div className="flex items-center">
               <Button
-                onClick={handleDelete}
+                onClick={handleDeleteAll}
                 type="button"
                 variant="ghost"
                 className="p-2 text-gray-500 hover:text-red-600"
@@ -97,6 +149,10 @@ export default function Variables() {
           <Button onClick={handleAdd} variant="outline" className="w-full">
             {t('variables.add')}
           </Button>
+
+          <Separator className="mt-6 mb-6" />
+
+          <div> {listVriableItems}</div>
         </div>
       </div>
     </>
