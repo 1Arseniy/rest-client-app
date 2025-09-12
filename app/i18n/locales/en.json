@@ -59,5 +59,13 @@
     "variablePlaceholder": "Write down a new variable",
     "valuePlaceholder": "Write down a new value",
     "add": "Add"
+  },
+
+  "restClient": {
+    "request": {
+      "method": "method",
+      "url": "Enter URL",
+      "send": "send"
+    }
   }
 }

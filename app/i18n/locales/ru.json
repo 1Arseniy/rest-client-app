@@ -59,5 +59,13 @@
     "variablePlaceholder": "Введите новую переменную",
     "valuePlaceholder": "Введите новое значение",
     "add": "Добавить"
+  },
+
+  "restClient": {
+    "request": {
+      "method": "метод",
+      "url": "Введите URL",
+      "send": "отправить"
+    }
   }
 }

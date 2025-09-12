@@ -5,4 +5,5 @@ export default [
   route('sign-in', 'routes/sign-in/sign-in.tsx'),
   route('sign-up', 'routes/sign-up/sign-up.tsx'),
   route('variables', 'routes/variables/variables.tsx'),
+  route('rest-client/:method?/:request?', 'routes/rest-client/rest-client.tsx'),
 ] satisfies RouteConfig;
