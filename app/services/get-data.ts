@@ -1,12 +1,17 @@
-import type { TypeResponse } from '@/types/types';
+import type { TypeResponse, TypeHeader } from '@/types/types';
 
 export async function getData(
   method: string,
-  url: string
+  url: string,
+  headers: TypeHeader[]
 ): Promise<TypeResponse> {
   try {
     const response = await fetch(url, {
       method,
+      headers: headers.reduce((acc: { [key: string]: string }, header) => {
+        acc[header.key] = header.value;
+        return acc;
+      }, {}),
     });
     if (!response.ok) {
       return {

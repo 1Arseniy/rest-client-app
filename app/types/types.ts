@@ -1,3 +1,8 @@
+export interface TypeHeader {
+  key: string;
+  value: string;
+}
+
 export interface TypeResponse {
   status: string;
   data?: string;
@@ -7,8 +12,5 @@ export interface TypeResponse {
 export interface TypeRequest {
   method: string;
   request: string;
-  headers: {
-    key: string;
-    value: string;
-  }[];
+  headers: TypeHeader[];
 }

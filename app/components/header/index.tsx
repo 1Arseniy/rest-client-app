@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 import '@/components/header/header.css';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, logout } from '@/services/firebase';
-import LanguageSelect from '../ui/select/LanguageSelect';
+import LanguageSelect from '../ui/select/language-select';
 import { useTranslation } from 'react-i18next';
 
 function Header() {

@@ -1,21 +1,11 @@
 import { useState } from 'react';
 
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select/select';
 import { Input } from '@/components/ui/input/input';
 import { Button } from '@/components/ui/button/button';
 import { Form, FormField } from '@/components/ui/form/form';
 
-import { useForm, type SubmitHandler } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router';
-import { methods } from '@/config/methods';
+import { useFieldArray, useForm, type SubmitHandler } from 'react-hook-form';
+import { useNavigate, useParams, useSearchParams } from 'react-router';
 import { getData } from '@/services/get-data';
 
 import { useTranslation } from 'react-i18next';
@@ -25,27 +15,44 @@ import { toBase64, returnToString } from '@/utils/to-base-64';
 
 import type { TypeResponse, TypeRequest } from '@/types/types';
 import HeadersEditor from '../headers-editor/headers-editor';
+import MethodsSelect from '../ui/select/methods-select';
+import BodyEditor from '../body-editor';
 
 function RequestControls() {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
   const { method, request } = useParams();
+  const [searchParams] = useSearchParams();
+  const query = new URLSearchParams();
 
   const [data, setData] = useState<TypeResponse>();
+
+  const getHeaders = Array.from(searchParams.entries()).map(([key, value]) => ({
+    key: key,
+    value: returnToString(value.slice(0, value.length - 2)),
+  }));
 
   const form = useForm<TypeRequest>({
     defaultValues: {
       method: method || 'GET',
       request: returnToString(request ? request : ''),
+      headers:
+        getHeaders.length > 0
+          ? getHeaders
+          : [{ key: 'Content-Type', value: 'application/json' }],
     },
   });
 
-  const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { fields, append, remove } = useFieldArray({
+    name: 'headers',
+    control: form.control,
+  });
 
   const onSubmit: SubmitHandler<TypeRequest> = async (data) => {
     const encodedRequest = toBase64(data.request);
-    console.log(data);
-    setData(await getData(data.method, data.request));
-    navigate(`/rest-client/${data.method}/${encodedRequest}`);
+    data.headers.forEach((el) => query.append(el.key, toBase64(el.value)));
+    setData(await getData(data.method, data.request, data.headers));
+    navigate(`/rest-client/${data.method}/${encodedRequest}?${query})}`);
   };
 
   return (
@@ -61,29 +68,7 @@ function RequestControls() {
               <FormField
                 control={form.control}
                 name="method"
-                render={({ field }) => (
-                  <Select
-                    value={field.value}
-                    onValueChange={field.onChange}
-                    defaultValue="GET"
-                  >
-                    <SelectTrigger className="w-[110px] mr-2">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>
-                          {t('restClient.request.method')}
-                        </SelectLabel>
-                        {methods.map((method) => (
-                          <SelectItem key={method} value={method}>
-                            {method}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                )}
+                render={({ field }) => <MethodsSelect field={field} />}
               />
               <Input
                 {...form.register('request')}
@@ -95,7 +80,13 @@ function RequestControls() {
                 {t('restClient.request.send')}
               </Button>
             </div>
-            <HeadersEditor register={form.register} />
+            <HeadersEditor
+              register={form.register}
+              fields={fields}
+              append={append}
+              remove={remove}
+            />
+            <BodyEditor />
           </form>
         </Form>
       </div>

@@ -11,7 +11,7 @@ import {
 function BodyEditor() {
   return (
     <div className="flex flex-col mb-5">
-      <div className="flex items-center">
+      <div className="flex items-center justify-between">
         <h1 className="mr-2">Body:</h1>
         <Select defaultValue="Text">
           <SelectTrigger className="w-[130px] mr-2 mb-2">

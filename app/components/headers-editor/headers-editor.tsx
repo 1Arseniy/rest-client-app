@@ -1,65 +1,60 @@
 import { Button } from '@/components/ui/button/button';
 import { Input } from '@/components/ui/input/input';
 
-import type { UseFormRegister } from 'react-hook-form';
+import type {
+  FieldArrayWithId,
+  UseFieldArrayAppend,
+  UseFieldArrayRemove,
+  UseFormRegister,
+} from 'react-hook-form';
 import type { TypeRequest } from '@/types/types';
-import { useState } from 'react';
-
 interface TypePropsHeadersEditor {
   register: UseFormRegister<TypeRequest>;
+  append: UseFieldArrayAppend<TypeRequest, 'headers'>;
+  remove: UseFieldArrayRemove;
+  fields: FieldArrayWithId<TypeRequest, 'headers', 'id'>[];
 }
 
-interface TypeStateHeadersEditor {
-  key: string;
-  value: string;
-  id: number;
-}
-
-function HeadersEditor({ register }: TypePropsHeadersEditor) {
-  const [headers, setHeaders] = useState<TypeStateHeadersEditor[]>([
-    { key: '', value: '', id: Date.now() },
-  ]);
-
-  const addHeader = () => {
-    setHeaders([...headers, { key: '', value: '', id: Date.now() }]);
-  };
-
-  const removeHeader = (index: number) => {
-    setHeaders([...headers.filter((header) => header.id !== index)]);
-  };
-
+function HeadersEditor({
+  register,
+  append,
+  remove,
+  fields,
+}: TypePropsHeadersEditor) {
   return (
-    <div>
+    <div className="mb-5">
       <div className="flex items-center justify-between mb-3">
         <h1 className="text-[18px]">Headers:</h1>
         <Button
           type="button"
           className="cursor-pointer ml-2"
-          onClick={addHeader}
+          onClick={() => append({ key: '', value: '' })}
         >
           Add Header
         </Button>
       </div>
-      {headers.map((header) => (
-        <div key={header.id} className="flex mb-5">
-          <Input
-            placeholder="Key"
-            className="mr-2"
-            {...register(`headers.${header.id}.key`)}
-          />
-          <Input
-            placeholder="Value"
-            {...register(`headers.${header.id}.value`)}
-          />
-          <Button
-            type="button"
-            className="cursor-pointer ml-2"
-            onClick={() => removeHeader(header.id)}
-          >
-            remove
-          </Button>
-        </div>
-      ))}
+      <div className="overflow-auto h-36 p-2.5">
+        {fields.map((header, index) => (
+          <div key={header.id} className="flex mb-5">
+            <Input
+              placeholder="Key"
+              className="mr-2"
+              {...register(`headers.${index}.key`)}
+            />
+            <Input
+              placeholder="Value"
+              {...register(`headers.${index}.value`)}
+            />
+            <Button
+              type="button"
+              className="cursor-pointer ml-2"
+              onClick={() => remove(index)}
+            >
+              remove
+            </Button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
