@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 function ResponsePanel({ status, data, error }: TypeResponse) {
   const { t } = useTranslation();
   return (
-    <div className="w-full">
+    <div className="w-full pt-11 pb-11 pl-5 pr-5">
       <div className="flex justify-center text-2xl">
         {t('restClient.responsePanel.title')}:
       </div>

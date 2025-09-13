@@ -12,15 +12,20 @@ interface TypePropsHeadersEditor {
 interface TypeStateHeadersEditor {
   key: string;
   value: string;
+  id: number;
 }
 
 function HeadersEditor({ register }: TypePropsHeadersEditor) {
   const [headers, setHeaders] = useState<TypeStateHeadersEditor[]>([
-    { key: '', value: '' },
+    { key: '', value: '', id: Date.now() },
   ]);
 
   const addHeader = () => {
-    setHeaders([...headers, { key: '', value: '' }]);
+    setHeaders([...headers, { key: '', value: '', id: Date.now() }]);
+  };
+
+  const removeHeader = (index: number) => {
+    setHeaders([...headers.filter((header) => header.id !== index)]);
   };
 
   return (
@@ -35,14 +40,24 @@ function HeadersEditor({ register }: TypePropsHeadersEditor) {
           Add Header
         </Button>
       </div>
-      {headers.map((_, i) => (
-        <div key={i} className="flex mb-5">
+      {headers.map((header) => (
+        <div key={header.id} className="flex mb-5">
           <Input
             placeholder="Key"
             className="mr-2"
-            {...register('header.key')}
+            {...register(`headers.${header.id}.key`)}
           />
-          <Input placeholder="Value" {...register('header.velue')} />
+          <Input
+            placeholder="Value"
+            {...register(`headers.${header.id}.value`)}
+          />
+          <Button
+            type="button"
+            className="cursor-pointer ml-2"
+            onClick={() => removeHeader(header.id)}
+          >
+            remove
+          </Button>
         </div>
       ))}
     </div>

@@ -7,8 +7,8 @@ export interface TypeResponse {
 export interface TypeRequest {
   method: string;
   request: string;
-  header: {
+  headers: {
     key: string;
-    velue: string;
-  };
+    value: string;
+  }[];
 }

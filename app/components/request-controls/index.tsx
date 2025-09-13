@@ -28,6 +28,7 @@ import HeadersEditor from '../headers-editor/headers-editor';
 
 function RequestControls() {
   const { method, request } = useParams();
+
   const [data, setData] = useState<TypeResponse>();
 
   const form = useForm<TypeRequest>({
@@ -97,12 +98,12 @@ function RequestControls() {
             <HeadersEditor register={form.register} />
           </form>
         </Form>
-        <ResponsePanel
-          status={data ? data.status : ''}
-          data={data?.data ? data.data : ''}
-          error={data?.error}
-        />
       </div>
+      <ResponsePanel
+        status={data ? data.status : ''}
+        data={data?.data ? data.data : ''}
+        error={data?.error}
+      />
     </div>
   );
 }
