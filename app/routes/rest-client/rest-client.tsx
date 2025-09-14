@@ -1,5 +1,4 @@
 import { lazy } from 'react';
-
 import PrivateRoute from '@/components/private-route';
 
 const RestClientForm = lazy(

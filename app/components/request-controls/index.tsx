@@ -17,6 +17,7 @@ import type { TypeResponse, TypeRequest } from '@/types/types';
 import HeadersEditor from '../headers-editor/headers-editor';
 import MethodsSelect from '../ui/select/methods-select';
 import BodyEditor from '../body-editor';
+import CodeRequest from '../code-request';
 
 function RequestControls() {
   const navigate = useNavigate();
@@ -108,6 +109,7 @@ function RequestControls() {
               register={form.register}
               valueBody={form.watch}
             />
+            <CodeRequest />
           </form>
         </Form>
       </div>
