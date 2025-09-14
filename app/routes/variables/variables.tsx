@@ -58,12 +58,50 @@ export default function Variables() {
     setVariable('');
   };
 
-  const listVriableItems = variables.map((variable) => (
-    <div key={variable.variable} className="mb-6 flex flex-row items-end gap-4">
+  const handleCurrentVariableChange = (
+    variableKey: string,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const array = [];
+    for (let i = 0; i < variables.length; i++) {
+      if (variables[i].variable !== variableKey) {
+        array.push(variables[i]);
+      } else {
+        const object = { variable: '', value: '' };
+        object.value = variables[i].value;
+        object.variable = e.target.value;
+
+        array.push(object);
+      }
+    }
+    setVariables(array);
+  };
+
+  const handleCurrentValueChange = (
+    variableKey: string,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const array = [];
+    for (let i = 0; i < variables.length; i++) {
+      if (variables[i].variable !== variableKey) {
+        array.push(variables[i]);
+      } else {
+        const object = { variable: '', value: '' };
+        object.variable = variables[i].variable;
+        object.value = e.target.value;
+
+        array.push(object);
+      }
+    }
+    setVariables(array);
+  };
+
+  const listVriableItems = variables.map((variable, index) => (
+    <div key={index} className="mb-6 flex flex-row items-end gap-4">
       <div className="flex flex-col flex-1">
         <Input
           value={variable.variable}
-          onChange={handleVariableChange}
+          onChange={(e) => handleCurrentVariableChange(variable.variable, e)}
           id="variable"
           type="text"
           placeholder={t('variables.variablePlaceholder')}
@@ -74,7 +112,7 @@ export default function Variables() {
       <div className="flex flex-col flex-1">
         <Input
           value={variable.value}
-          onChange={handleValueChange}
+          onChange={(e) => handleCurrentValueChange(variable.variable, e)}
           id="value"
           type="text"
           placeholder={t('variables.valuePlaceholder')}
