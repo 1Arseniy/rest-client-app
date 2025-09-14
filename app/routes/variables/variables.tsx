@@ -4,22 +4,16 @@ import { Label } from '@/components/ui/label/label';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { useEffect, useState } from 'react';
 import { Separator } from '@/components/ui/separator';
-
-type VariableItem = {
-  variable: string;
-  value: string;
-};
+import useVariables from '@/hooks/useVariables';
+import { useState } from 'react';
 
 export default function Variables() {
   const { t } = useTranslation();
   const [variable, setVariable] = useState('');
   const [value, setValue] = useState('');
 
-  const [variables, setVariables] = useState<VariableItem[]>(
-    JSON.parse(localStorage.getItem('array') || '[]s')
-  );
+  const [variables, setVariables] = useVariables();
 
   const handleAdd = () => {
     setVariables([...variables, { variable: variable, value: value }]);
@@ -48,10 +42,6 @@ export default function Variables() {
     setValue('');
     setVariable('');
   };
-
-  useEffect(() => {
-    localStorage.setItem('array', JSON.stringify(variables));
-  }, [variables]);
 
   const listVriableItems = variables.map((variable) => (
     <div key={variable.variable} className="mb-6 flex flex-row items-end gap-4">
