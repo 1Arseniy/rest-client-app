@@ -58,7 +58,11 @@
     "value": "Current value",
     "variablePlaceholder": "Write down a new variable",
     "valuePlaceholder": "Write down a new value",
-    "add": "Add"
+    "add": "Add",
+    "errors": {
+      "empty": "Fields can not be empty",
+      "unique": "Variable key must be unique"
+    }
   },
 
   "restClient": {

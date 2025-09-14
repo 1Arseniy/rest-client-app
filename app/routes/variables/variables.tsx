@@ -6,14 +6,29 @@ import { useTranslation } from 'react-i18next';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Separator } from '@/components/ui/separator';
 import useVariables from '@/hooks/useVariables';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Variables() {
   const { t } = useTranslation();
   const [variable, setVariable] = useState('');
   const [value, setValue] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
   const [variables, setVariables] = useVariables();
+
+  useEffect(() => {
+    if (variable === '' || value === '') {
+      return setError('variables.errors.empty');
+    }
+
+    for (let i = 0; i < variables.length; i++) {
+      if (variables[i].variable === variable) {
+        return setError('variables.errors.unique');
+      }
+    }
+
+    return setError(null);
+  }, [variable, variables, value]);
 
   const handleAdd = () => {
     setVariables([...variables, { variable: variable, value: value }]);
@@ -89,7 +104,7 @@ export default function Variables() {
             {t('variables.variables')}
           </h2>
 
-          <div className="mb-6 flex flex-row items-end gap-4">
+          <div className="mb-3 flex flex-row items-end gap-4">
             <div className="flex flex-col flex-1">
               <Label
                 htmlFor="variable"
@@ -136,7 +151,19 @@ export default function Variables() {
             </div>
           </div>
 
-          <Button onClick={handleAdd} variant="outline" className="w-full">
+          <div
+            className="mb-3 ml-2 mr-2 text-sm italic text-red-700"
+            data-testid="fname-error"
+          >
+            {error ? t(error) : null}
+          </div>
+
+          <Button
+            disabled={error ? true : false}
+            onClick={handleAdd}
+            variant="outline"
+            className="w-full"
+          >
             {t('variables.add')}
           </Button>
 
