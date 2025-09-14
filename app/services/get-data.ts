@@ -3,15 +3,20 @@ import type { TypeResponse, TypeHeader } from '@/types/types';
 export async function getData(
   method: string,
   url: string,
-  headers: TypeHeader[]
+  headers: TypeHeader[],
+  body: string,
+  typeTextarea: string
 ): Promise<TypeResponse> {
   try {
+    const content =
+      typeTextarea === 'JSON' ? JSON.stringify(JSON.parse(body)) : body;
     const response = await fetch(url, {
       method,
       headers: headers.reduce((acc: { [key: string]: string }, header) => {
         acc[header.key] = header.value;
         return acc;
       }, {}),
+      body: body ? content : null,
     });
     if (!response.ok) {
       return {

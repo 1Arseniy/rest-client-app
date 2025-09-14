@@ -21,25 +21,31 @@ import BodyEditor from '../body-editor';
 function RequestControls() {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { method, request } = useParams();
+  const { method, request, body } = useParams();
   const [searchParams] = useSearchParams();
   const query = new URLSearchParams();
 
   const [data, setData] = useState<TypeResponse>();
 
   const getHeaders = Array.from(searchParams.entries()).map(([key, value]) => ({
-    key: key,
+    key,
     value: returnToString(value.slice(0, value.length - 2)),
   }));
 
   const form = useForm<TypeRequest>({
     defaultValues: {
       method: method || 'GET',
-      request: returnToString(request ? request : ''),
+      request: returnToString(
+        request
+          ? request
+          : toBase64('https://jsonplaceholder.typicode.com/todos/')
+      ),
       headers:
         getHeaders.length > 0
           ? getHeaders
-          : [{ key: 'Content-Type', value: 'application/json' }],
+          : [{ key: 'Content-Type', value: 'text/plain' }],
+      typeTextarea: 'Text',
+      body: returnToString(body ? body : ''),
     },
   });
 
@@ -50,9 +56,20 @@ function RequestControls() {
 
   const onSubmit: SubmitHandler<TypeRequest> = async (data) => {
     const encodedRequest = toBase64(data.request);
+    const encodeBody = toBase64(JSON.stringify(data.body));
     data.headers.forEach((el) => query.append(el.key, toBase64(el.value)));
-    setData(await getData(data.method, data.request, data.headers));
-    navigate(`/rest-client/${data.method}/${encodedRequest}?${query})}`);
+    setData(
+      await getData(
+        data.method,
+        data.request,
+        data.headers,
+        data.body,
+        data.typeTextarea
+      )
+    );
+    navigate(
+      `/rest-client/${data.method}/${encodedRequest}/${encodeBody}?${query})}`
+    );
   };
 
   return (
@@ -86,7 +103,11 @@ function RequestControls() {
               append={append}
               remove={remove}
             />
-            <BodyEditor />
+            <BodyEditor
+              control={form.control}
+              register={form.register}
+              valueBody={form.watch}
+            />
           </form>
         </Form>
       </div>

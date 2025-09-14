@@ -13,4 +13,6 @@ export interface TypeRequest {
   method: string;
   request: string;
   headers: TypeHeader[];
+  body: string;
+  typeTextarea: string;
 }
