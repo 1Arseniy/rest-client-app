@@ -3,12 +3,12 @@ import { Button } from '@/components/ui/button/button';
 import { Label } from '@/components/ui/label/label';
 import { Link, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { schemaSignup } from '@/validation/validation';
+import { makeSchemas } from '@/validation/validation';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, registerWithEmailAndPassword } from '../../services/firebase';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 type SignUpFormData = {
   email: string;
@@ -18,11 +18,13 @@ type SignUpFormData = {
 };
 
 export default function SignUp() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { schemaSignup } = useMemo(() => makeSchemas(t), [t]);
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
+    trigger,
   } = useForm<SignUpFormData>({
     resolver: yupResolver(schemaSignup),
     mode: 'onChange',
@@ -34,6 +36,9 @@ export default function SignUp() {
     if (loading) return;
     if (user) navigate('/');
   }, [user, loading, navigate]);
+  useEffect(() => {
+    trigger();
+  }, [i18n.language, trigger]);
 
   const onSubmit = (data: SignUpFormData) => {
     registerWithEmailAndPassword(data.name, data.email, data.password);

@@ -3,12 +3,12 @@ import { Button } from '@/components/ui/button/button';
 import { Label } from '@/components/ui/label/label';
 import { Link, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { schemaSignin } from '@/validation/validation';
+import { makeSchemas } from '@/validation/validation';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { auth, logInWithEmailAndPassword } from '../../services/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 type SignInFormData = {
   email: string;
@@ -16,12 +16,15 @@ type SignInFormData = {
 };
 
 export default function SignIn() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
+  const { schemaSignin } = useMemo(() => makeSchemas(t), [t]);
+  console.log(i18n.language);
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
+    trigger,
   } = useForm<SignInFormData>({
     resolver: yupResolver(schemaSignin),
     mode: 'onChange',
@@ -34,6 +37,9 @@ export default function SignIn() {
     }
     if (user) navigate('/');
   }, [user, loading, navigate]);
+  useEffect(() => {
+    trigger();
+  }, [i18n.language, trigger]);
 
   const onSubmit = (data: SignInFormData) => {
     logInWithEmailAndPassword(data.email, data.password);
