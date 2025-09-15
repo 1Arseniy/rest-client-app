@@ -8,6 +8,9 @@ import type {
   UseFormRegister,
 } from 'react-hook-form';
 import type { TypeRequest } from '@/types/types';
+import { useTranslation } from 'react-i18next';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 interface TypePropsHeadersEditor {
   register: UseFormRegister<TypeRequest>;
@@ -22,16 +25,17 @@ function HeadersEditor({
   remove,
   fields,
 }: TypePropsHeadersEditor) {
+  const { t } = useTranslation();
   return (
     <div className="mb-5">
       <div className="flex items-center justify-between mb-3">
-        <h1 className="text-[18px]">Headers:</h1>
+        <h1 className="text-[18px]">{t('restClient.headers.title')}:</h1>
         <Button
           type="button"
           className="cursor-pointer ml-2"
           onClick={() => append({ key: '', value: '' })}
         >
-          Add Header
+          {t('restClient.headers.addHeader')}
         </Button>
       </div>
       <div className="overflow-auto h-36 p-2.5">
@@ -51,7 +55,7 @@ function HeadersEditor({
               className="cursor-pointer ml-2"
               onClick={() => remove(index)}
             >
-              remove
+              <FontAwesomeIcon icon={faTrash} />
             </Button>
           </div>
         ))}

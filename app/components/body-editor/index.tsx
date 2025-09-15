@@ -13,6 +13,7 @@ import type { TypeRequest } from '@/types/types';
 import { FormField } from '../ui/form/form';
 import { Button } from '../ui/button/button';
 import { checkBodyFormat } from '@/utils/check-body-format';
+import { useTranslation } from 'react-i18next';
 
 interface TypePropsBodyEditor {
   register: UseFormRegister<TypeRequest>;
@@ -21,10 +22,11 @@ interface TypePropsBodyEditor {
 }
 
 function BodyEditor({ register, control, valueBody }: TypePropsBodyEditor) {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col mb-5">
       <div className="flex items-center justify-between">
-        <h1 className="mr-2">Body:</h1>
+        <h1 className="mr-2">{t('restClient.body.title')}:</h1>
         <FormField
           control={control}
           name="typeTextarea"
@@ -38,7 +40,7 @@ function BodyEditor({ register, control, valueBody }: TypePropsBodyEditor) {
                     checkBodyFormat(field.value, valueBody('body'))
                   }
                 >
-                  format
+                  {t('restClient.body.format')}
                 </Button>
               )}
               <Select
@@ -51,7 +53,9 @@ function BodyEditor({ register, control, valueBody }: TypePropsBodyEditor) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectItem value="Text">Text</SelectItem>
+                    <SelectItem value="Text">
+                      {t('restClient.body.text')}
+                    </SelectItem>
                     <SelectItem value="JSON">JSON</SelectItem>
                   </SelectGroup>
                 </SelectContent>

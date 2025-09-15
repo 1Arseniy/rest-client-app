@@ -8,11 +8,14 @@ import {
   SelectValue,
 } from '@/components/ui/select/select';
 
+import { useTranslation } from 'react-i18next';
+
 function CodeRequest() {
+  const { t } = useTranslation();
   return (
     <div>
       <div className="flex items-center justify-between mb-3">
-        <h1 className="mr-2">Code:</h1>
+        <h1 className="mr-2">{t('restClient.code.title')}:</h1>
         <Select defaultValue="curl">
           <SelectTrigger className="w-[170px] mr-2 mb-2">
             <SelectValue />

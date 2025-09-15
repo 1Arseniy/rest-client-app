@@ -80,6 +80,18 @@
       "url": "Введите URL",
       "send": "отправить"
     },
+    "headers": {
+      "title": "Заголовки",
+      "addHeader": "Добавить"
+    },
+    "body": {
+      "title": "Тело",
+      "text": "Текст",
+      "format": " Форматировать"
+    },
+    "code": {
+      "title": "Фрагмент кода"
+    },
     "responsePanel": {
       "title": "Ответ",
       "status": "Статус"
