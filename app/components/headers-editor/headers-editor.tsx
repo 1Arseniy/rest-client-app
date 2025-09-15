@@ -8,6 +8,7 @@ import type {
   UseFormRegister,
 } from 'react-hook-form';
 import type { TypeRequest } from '@/types/types';
+
 interface TypePropsHeadersEditor {
   register: UseFormRegister<TypeRequest>;
   append: UseFieldArrayAppend<TypeRequest, 'headers'>;
