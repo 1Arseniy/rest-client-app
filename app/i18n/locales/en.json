@@ -44,6 +44,28 @@
       "email": "Write your email",
       "password": "Write your password",
       "repeatPassword": "Repeat your password"
+    },
+    "errors": {
+      "password": {
+        "required": "Password is required",
+        "min": "Password must be at least 8 symbols",
+        "lowerCase": "Password must contain at least one lowercase letter (a-z)",
+        "upperCase": "Password must contain at least one uppercase letter (A-Z)",
+        "digit": "Password must contain at least one digit",
+        "specialSymbol": "Password must contain at least one special character !\"#$%&'()*+,-./:;<=>?@[\\]^_\\`{|}~'"
+      },
+      "email": {
+        "format": "Email address must be properly formatted (e.g., user@example.com)",
+        "required": "Email is required"
+      },
+      "name": {
+        "firstLetter": "The first letter should be capitalized",
+        "required": "First name must not be empty!"
+      },
+      "passwordRepeat": {
+        "required": "Repeat password is required",
+        "match": "Repeat password should match current password"
+      }
     }
   },
   "signInRoute": {
