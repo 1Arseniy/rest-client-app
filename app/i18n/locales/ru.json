@@ -74,6 +74,19 @@
   "signUpRoute": {
     "linkToSignIn": "Уже зарегистрированы? Тогда войдите!"
   },
+  "variables": {
+    "variables": "Переменные",
+    "variable": "Переменная",
+    "value": "Текущее значение",
+    "variablePlaceholder": "Введите новую переменную",
+    "valuePlaceholder": "Введите новое значение",
+    "add": "Добавить",
+    "errors": {
+      "empty": "Поля не должны быть пустыми",
+      "unique": "Ключ переменной должен быть уникальным"
+    }
+  },
+
   "restClient": {
     "request": {
       "method": "метод",

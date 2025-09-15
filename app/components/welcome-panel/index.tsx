@@ -27,8 +27,8 @@ function WelcomePanel() {
       ) : (
         <>
           <h1 className="text-center text-3xl mb-2">
-            {t('mainRoute.welcomePanel.welcomeBack')}, [
-            {user?.displayName ?? t('auth.guest')}]!
+            {t('mainRoute.welcomePanel.welcomeBack')},{' '}
+            {user?.displayName ?? t('auth.guest')}!
           </h1>
           <div className="mt-10 text-center">
             <Link className="hover:underline mr-4" to={'/rest-client'}>
@@ -37,7 +37,7 @@ function WelcomePanel() {
             <Link className="hover:underline mr-4" to={''}>
               {t('auth.history')}
             </Link>
-            <Link className="hover:underline" to={''}>
+            <Link className="hover:underline" to={'/variables'}>
               {t('auth.variables')}
             </Link>
           </div>
