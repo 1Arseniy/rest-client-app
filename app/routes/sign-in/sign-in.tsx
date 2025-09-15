@@ -9,6 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { auth, logInWithEmailAndPassword } from '../../services/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useEffect, useMemo } from 'react';
+import { Spinner } from '@/components/ui/spinner';
 
 type SignInFormData = {
   email: string;
@@ -19,7 +20,7 @@ export default function SignIn() {
   const { t, i18n } = useTranslation();
 
   const { schemaSignin } = useMemo(() => makeSchemas(t), [t]);
-  console.log(i18n.language);
+
   const {
     register,
     handleSubmit,
@@ -45,7 +46,9 @@ export default function SignIn() {
     logInWithEmailAndPassword(data.email, data.password);
   };
 
-  return (
+  return loading ? (
+    <Spinner variant="bars" size={54} />
+  ) : (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
         <h2 className="mb-6 text-center text-2xl font-bold text-gray-800">

@@ -9,6 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, registerWithEmailAndPassword } from '../../services/firebase';
 import { useEffect, useMemo } from 'react';
+import { Spinner } from '@/components/ui/spinner';
 
 type SignUpFormData = {
   email: string;
@@ -44,7 +45,9 @@ export default function SignUp() {
     registerWithEmailAndPassword(data.name, data.email, data.password);
   };
 
-  return (
+  return loading ? (
+    <Spinner variant="bars" size={54} />
+  ) : (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
         <h2 className="mb-6 text-center text-2xl font-bold text-gray-800">

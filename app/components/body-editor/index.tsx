@@ -64,7 +64,10 @@ function BodyEditor({ register, control, valueBody }: TypePropsBodyEditor) {
           )}
         />
       </div>
-      <Textarea placeholder="Type your body" {...register('body')} />
+      <Textarea
+        placeholder={t('restClient.body.textarea')}
+        {...register('body')}
+      />
     </div>
   );
 }

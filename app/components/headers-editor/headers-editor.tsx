@@ -42,15 +42,16 @@ function HeadersEditor({
         {fields.map((header, index) => (
           <div key={header.id} className="flex mb-5">
             <Input
-              placeholder="Key"
+              placeholder={t('restClient.headers.key')}
               className="mr-2"
               {...register(`headers.${index}.key`)}
             />
             <Input
-              placeholder="Value"
+              placeholder={t('restClient.headers.value')}
               {...register(`headers.${index}.value`)}
             />
             <Button
+              data-testid="removeBtn"
               type="button"
               className="cursor-pointer ml-2"
               onClick={() => remove(index)}
