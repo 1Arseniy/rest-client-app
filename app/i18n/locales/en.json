@@ -92,6 +92,29 @@
       "method": "method",
       "url": "Enter URL",
       "send": "send"
+    },
+    "headers": {
+      "title": "Headers",
+      "addHeader": "Add",
+      "key": "Key",
+      "value": "Value"
+    },
+    "body": {
+      "title": "Body",
+      "text": "Text",
+      "format": "format",
+      "textarea": "Enter request body"
+    },
+    "code": {
+      "title": "Code snippet"
+    },
+    "responsePanel": {
+      "title": "Response",
+      "status": "Status"
     }
+  },
+  "page404": {
+    "toMain": "To main page",
+    "message": "The requested page could not be found"
   }
 }

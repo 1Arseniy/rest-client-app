@@ -1,4 +1,3 @@
-// validation/schema.ts
 import * as yup from 'yup';
 import type { TFunction } from 'i18next';
 

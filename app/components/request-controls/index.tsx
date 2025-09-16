@@ -1,43 +1,76 @@
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select/select';
+import { useState } from 'react';
+
 import { Input } from '@/components/ui/input/input';
-import { Button } from '../ui/button/button';
-import { useForm, type SubmitHandler } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router';
+import { Button } from '@/components/ui/button/button';
 import { Form, FormField } from '@/components/ui/form/form';
-import { methods } from '@/config/methods';
-import { useTranslation } from 'react-i18next';
+
+import { useFieldArray, useForm, type SubmitHandler } from 'react-hook-form';
+import { useNavigate, useParams, useSearchParams } from 'react-router';
 import { getData } from '@/services/get-data';
+
+import { useTranslation } from 'react-i18next';
+import ResponsePanel from '../response-panel';
 
 import { toBase64, returnToString } from '@/utils/to-base-64';
 
-interface TypeRequest {
-  method: string;
-  request: string;
-}
+import type { TypeResponse, TypeRequest } from '@/types/types';
+import HeadersEditor from '../headers-editor/headers-editor';
+import MethodsSelect from '../ui/select/methods-select';
+import BodyEditor from '../body-editor';
+import CodeRequest from '../code-request';
 
 function RequestControls() {
-  const { method, request } = useParams();
-  const form = useForm<TypeRequest>({
-    defaultValues: {
-      method: method,
-      request: returnToString(request ? request : ''),
-    },
-  });
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { method, request, body } = useParams();
+  const [searchParams] = useSearchParams();
+  const query = new URLSearchParams();
+
+  const [data, setData] = useState<TypeResponse>();
+
+  const getHeaders = Array.from(searchParams.entries()).map(([key, value]) => ({
+    key,
+    value: returnToString(value.slice(0, value.length - 2)),
+  }));
+
+  const form = useForm<TypeRequest>({
+    defaultValues: {
+      method: method || 'GET',
+      request: returnToString(
+        request
+          ? request
+          : toBase64('https://jsonplaceholder.typicode.com/todos/')
+      ),
+      headers:
+        getHeaders.length > 0
+          ? getHeaders
+          : [{ key: 'Content-Type', value: 'text/plain' }],
+      typeTextarea: 'Text',
+      body: returnToString(body ? body : ''),
+    },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    name: 'headers',
+    control: form.control,
+  });
 
   const onSubmit: SubmitHandler<TypeRequest> = async (data) => {
     const encodedRequest = toBase64(data.request);
-    await getData(data.method, data.request);
-    navigate(`/rest-client/${data.method}/${encodedRequest}`);
+    const encodeBody = toBase64(JSON.stringify(data.body));
+    data.headers.forEach((el) => query.append(el.key, toBase64(el.value)));
+    setData(
+      await getData(
+        data.method,
+        data.request,
+        data.headers,
+        data.body,
+        data.typeTextarea
+      )
+    );
+    navigate(
+      `/rest-client/${data.method}/${encodedRequest}/${encodeBody}?${query})}`
+    );
   };
 
   return (
@@ -47,47 +80,44 @@ function RequestControls() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex w-full justify-center mb-5"
+            className="flex w-full flex-col justify-center mb-5"
           >
-            <FormField
+            <div className="flex justify-between mb-5">
+              <FormField
+                control={form.control}
+                name="method"
+                render={({ field }) => <MethodsSelect field={field} />}
+              />
+              <Input
+                {...form.register('request')}
+                className="w-[30vw]"
+                type="text"
+                placeholder={t('restClient.request.url')}
+              />
+              <Button className="ml-2.5" type="submit">
+                {t('restClient.request.send')}
+              </Button>
+            </div>
+            <HeadersEditor
+              register={form.register}
+              fields={fields}
+              append={append}
+              remove={remove}
+            />
+            <BodyEditor
               control={form.control}
-              name="method"
-              render={({ field }) => (
-                <Select
-                  value={field.value}
-                  onValueChange={field.onChange}
-                  defaultValue="GET"
-                >
-                  <SelectTrigger className="w-[110px] mr-2">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>
-                        {t('restClient.request.method')}
-                      </SelectLabel>
-                      {methods.map((method) => (
-                        <SelectItem key={method} value={method}>
-                          {method}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              )}
+              register={form.register}
+              valueBody={form.watch}
             />
-            <Input
-              {...form.register('request')}
-              className="w-[30vw]"
-              type="text"
-              placeholder={t('restClient.request.url')}
-            />
-            <Button className="ml-2.5" type="submit">
-              {t('restClient.request.send')}
-            </Button>
+            <CodeRequest />
           </form>
         </Form>
       </div>
+      <ResponsePanel
+        status={data ? data.status : ''}
+        data={data?.data ? data.data : ''}
+        error={data?.error}
+      />
     </div>
   );
 }

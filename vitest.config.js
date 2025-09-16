@@ -19,6 +19,7 @@ export default defineConfig({
         'app/routes.{js,jsx,ts,tsx}',
         'app/lib/utils.ts',
         'app/setupTests.{js,ts}',
+        'app/validation/validation.tsx',
         'app/**/*.d.ts',
         '**/node_modules/**',
         '**/dist/**',

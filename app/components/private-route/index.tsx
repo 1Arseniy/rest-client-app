@@ -14,9 +14,10 @@ function PrivateRoute({ children }: PropsWithChildren) {
 
   useEffect(() => {
     if (!user && !loading) navigate('/');
-  }, [user, navigate]);
+  }, [user, navigate, loading]);
 
-  if (loading) return <Spinner variant="bars" size={54} />;
+  if (loading)
+    return <Spinner data-testid="spinner" variant="bars" size={54} />;
 
   return <>{children}</>;
 }

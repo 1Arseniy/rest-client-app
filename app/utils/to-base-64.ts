@@ -1,7 +1,7 @@
 export function toBase64(request: string) {
-  return btoa(request);
+  return btoa(encodeURIComponent(request));
 }
 
 export function returnToString(decodeStr: string) {
-  return atob(decodeStr);
+  return decodeURIComponent(atob(decodeStr));
 }
