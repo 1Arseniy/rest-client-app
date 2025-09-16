@@ -1,12 +1,9 @@
-import { useState } from 'react';
-
 import { Input } from '@/components/ui/input/input';
 import { Button } from '@/components/ui/button/button';
 import { Form, FormField } from '@/components/ui/form/form';
 
 import { useFieldArray, useForm, type SubmitHandler } from 'react-hook-form';
 import { useNavigate, useParams, useSearchParams } from 'react-router';
-import { getData } from '@/services/get-data';
 
 import { useTranslation } from 'react-i18next';
 import ResponsePanel from '../response-panel';
@@ -19,26 +16,28 @@ import MethodsSelect from '../ui/select/methods-select';
 import BodyEditor from '../body-editor';
 import CodeRequest from '../code-request';
 
-function RequestControls() {
+interface TypeRequestControls {
+  data: TypeResponse;
+}
+
+function RequestControls({ data }: TypeRequestControls) {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { method, request, body } = useParams();
+  const { method, requestUrl, body } = useParams();
   const [searchParams] = useSearchParams();
   const query = new URLSearchParams();
 
-  const [data, setData] = useState<TypeResponse>();
-
   const getHeaders = Array.from(searchParams.entries()).map(([key, value]) => ({
     key,
-    value: returnToString(value.slice(0, value.length - 2)),
+    value: returnToString(value),
   }));
 
   const form = useForm<TypeRequest>({
     defaultValues: {
       method: method || 'GET',
       request: returnToString(
-        request
-          ? request
+        requestUrl
+          ? requestUrl
           : toBase64('https://jsonplaceholder.typicode.com/todos/')
       ),
       headers:
@@ -57,19 +56,10 @@ function RequestControls() {
 
   const onSubmit: SubmitHandler<TypeRequest> = async (data) => {
     const encodedRequest = toBase64(data.request);
-    const encodeBody = toBase64(JSON.stringify(data.body));
+    const encodeBody = toBase64(data.body);
     data.headers.forEach((el) => query.append(el.key, toBase64(el.value)));
-    setData(
-      await getData(
-        data.method,
-        data.request,
-        data.headers,
-        data.body,
-        data.typeTextarea
-      )
-    );
     navigate(
-      `/rest-client/${data.method}/${encodedRequest}/${encodeBody}?${query})}`
+      `/rest-client/${data.method}/${encodedRequest}/${encodeBody}?${query}`
     );
   };
 
@@ -113,11 +103,7 @@ function RequestControls() {
           </form>
         </Form>
       </div>
-      <ResponsePanel
-        status={data ? data.status : ''}
-        data={data?.data ? data.data : ''}
-        error={data?.error}
-      />
+      <ResponsePanel status={data.status} data={data.data} error={data.error} />
     </div>
   );
 }
