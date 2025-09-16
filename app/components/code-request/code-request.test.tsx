@@ -17,8 +17,6 @@ describe('tests CodeRequest', () => {
     );
   });
   it('should show title and select with programming languages', () => {
-    screen.debug();
-
     expect(screen.getByText('Code snippet:')).toBeInTheDocument();
     expect(screen.getByText('curl')).toBeInTheDocument();
   });
