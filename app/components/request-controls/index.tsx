@@ -18,10 +18,12 @@ import HeadersEditor from '../headers-editor/headers-editor';
 import MethodsSelect from '../ui/select/methods-select';
 import BodyEditor from '../body-editor';
 import CodeRequest from '../code-request';
+import useVariables from '@/hooks/useVariables';
 
 function RequestControls() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const [variables] = useVariables();
   const { method, request, body } = useParams();
   const [searchParams] = useSearchParams();
   const query = new URLSearchParams();
@@ -59,10 +61,19 @@ function RequestControls() {
     const encodedRequest = toBase64(data.request);
     const encodeBody = toBase64(JSON.stringify(data.body));
     data.headers.forEach((el) => query.append(el.key, toBase64(el.value)));
+    let url = data.request;
+    console.log(variables);
+
+    for (let i = 0; i < variables.length; i++) {
+      if (url.includes(`{{${variables[i].variable}}}`)) {
+        url = url.replace(`{{${variables[i].variable}}}`, variables[i].value);
+      }
+    }
+
     setData(
       await getData(
         data.method,
-        data.request,
+        url,
         data.headers,
         data.body,
         data.typeTextarea
