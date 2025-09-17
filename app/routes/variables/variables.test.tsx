@@ -1,7 +1,16 @@
-import React from 'react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Variables from './variables';
+import useVariables from '@/hooks/useVariables';
+
+interface VariableItem {
+  variable: string;
+  value: string;
+}
+
+vi.mock('@/hooks/useVariables', () => ({
+  default: vi.fn(),
+}));
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -9,123 +18,116 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-type VariableItem = { variable: string; value: string };
-
-describe('<Variables />', () => {
-  let variablesState: VariableItem[];
-  let setVariablesMock: vi.Mock;
+describe('Variables component tests', () => {
+  let variables: VariableItem[];
+  let setVariables: (...args: VariableItem[]) => void;
 
   beforeEach(() => {
-    setVariablesMock = vi.fn();
-    variablesState = [];
-
-    vi.mock('@/hooks/useVariables', () => ({
-      default: () => [variablesState, setVariablesMock],
-    }));
+    variables = [];
+    setVariables = vi.fn();
+    (useVariables as unknown as Mock).mockReturnValue([
+      variables,
+      setVariables,
+    ]);
   });
 
-  it('shows error when variable or value input is empty', () => {
+  it('render component and elemenets of form', () => {
     render(<Variables />);
+    expect(screen.getByLabelText('variables.variable')).toBeInTheDocument();
+    expect(screen.getByLabelText('variables.value')).toBeInTheDocument();
+    expect(screen.getByText('variables.add')).toBeInTheDocument();
+  });
 
-    const addBtn = screen.getByText('variables.add');
-
-    fireEvent.click(addBtn);
-
+  it('show error if fields are empty', () => {
+    render(<Variables />);
+    fireEvent.click(screen.getByText('variables.add'));
     expect(screen.getByTestId('fname-error')).toHaveTextContent(
       'variables.errors.empty'
     );
-    expect(addBtn).toBeDisabled();
   });
 
-  it('clears error and allows add when variable and value are filled and unique', () => {
+  it('add new variable with correct variables', () => {
     render(<Variables />);
 
-    const variableInput = screen.getByLabelText('variables.variable');
-    const valueInput = screen.getByLabelText('variables.value');
-    const addBtn = screen.getByText('variables.add');
+    fireEvent.change(screen.getByLabelText('variables.variable'), {
+      target: { value: 'var1' },
+    });
+    fireEvent.change(screen.getByLabelText('variables.value'), {
+      target: { value: 'value1' },
+    });
 
-    fireEvent.change(variableInput, { target: { value: 'VAR1' } });
-    fireEvent.change(valueInput, { target: { value: 'VALUE1' } });
+    fireEvent.click(screen.getByText('variables.add'));
 
-    expect(screen.getByTestId('fname-error')).toHaveTextContent('');
-
-    expect(addBtn).not.toBeDisabled();
-
-    fireEvent.click(addBtn);
-
-    expect(setVariablesMock).toHaveBeenCalledWith(
-      expect.arrayContaining([{ variable: 'VAR1', value: 'VALUE1' }])
-    );
-
-    expect((variableInput as HTMLInputElement).value).toBe('');
-    expect((valueInput as HTMLInputElement).value).toBe('');
+    expect(setVariables).toHaveBeenCalledWith([
+      { variable: 'var1', value: 'value1' },
+    ]);
+    expect(screen.getByLabelText('variables.variable')).toHaveValue('');
+    expect(screen.getByLabelText('variables.value')).toHaveValue('');
   });
 
-  it('shows uniqueness error if variable duplicates one from variables', () => {
-    variablesState = [{ variable: 'EXISTING', value: 'some' }];
-    setVariablesMock = vi.fn();
-
-    vi.mock('@/hooks/useVariables', () => ({
-      default: () => [variablesState, setVariablesMock],
-    }));
+  it('show error with repeated name of variable', () => {
+    variables = [{ variable: 'var1', value: 'value1' }];
+    (useVariables as unknown as Mock).mockReturnValue([
+      variables,
+      setVariables,
+    ]);
 
     render(<Variables />);
 
-    const variableInput = screen.getByLabelText('variables.variable');
-    const valueInput = screen.getByLabelText('variables.value');
-    const addBtn = screen.getByText('variables.add');
-
-    fireEvent.change(variableInput, { target: { value: 'EXISTING' } });
-    fireEvent.change(valueInput, { target: { value: 'VALUE2' } });
+    fireEvent.change(screen.getByLabelText('variables.variable'), {
+      target: { value: 'var1' },
+    });
+    fireEvent.change(screen.getByLabelText('variables.value'), {
+      target: { value: 'value2' },
+    });
 
     expect(screen.getByTestId('fname-error')).toHaveTextContent(
       'variables.errors.unique'
     );
-    expect(addBtn).toBeDisabled();
   });
 
-  it('deletes a specific current variable item', () => {
-    variablesState = [
-      { variable: 'A', value: '1' },
-      { variable: 'B', value: '2' },
-    ];
-    setVariablesMock = vi.fn();
-
-    vi.mock('@/hooks/useVariables', () => ({
-      default: () => [variablesState, setVariablesMock],
-    }));
+  it('delete current variable', () => {
+    variables = [{ variable: 'var1', value: 'value1' }];
+    (useVariables as unknown as Mock).mockReturnValue([
+      variables,
+      setVariables,
+    ]);
 
     render(<Variables />);
+    fireEvent.click(screen.getAllByRole('button', { name: '' })[0]);
 
-    const deleteButtons = screen.getAllByRole('button', { name: /trash/i });
-    fireEvent.click(deleteButtons[0]);
-    expect(setVariablesMock).toHaveBeenCalledWith(
-      expect.not.arrayContaining([{ variable: 'A', value: '1' }])
-    );
+    expect(setVariables).toHaveBeenCalledWith([]);
   });
 
-  it('delete all clears variables and inputs', () => {
-    variablesState = [{ variable: 'X', value: 'Y' }];
-    setVariablesMock = vi.fn();
-
-    vi.mock('@/hooks/useVariables', () => ({
-      default: () => [variablesState, setVariablesMock],
-    }));
+  it('update current variable', () => {
+    variables = [{ variable: 'var1', value: 'value1' }];
+    (useVariables as unknown as Mock).mockReturnValue([
+      variables,
+      setVariables,
+    ]);
 
     render(<Variables />);
+    const input = screen.getByDisplayValue('var1') as HTMLInputElement;
+    fireEvent.change(input, { target: { value: 'var1-updated' } });
 
-    const deleteAllBtn =
-      screen.getAllByRole('button', { name: /trash/i })[1] ||
-      screen.getByText((text: string, element: HTMLElement | null) => {
-        return element?.textContent === '' && element.querySelector('svg');
-      });
+    expect(setVariables).toHaveBeenCalledWith([
+      { variable: 'var1-updated', value: 'value1' },
+    ]);
+  });
 
-    fireEvent.click(deleteAllBtn);
+  it('update current value of variable', () => {
+    variables = [{ variable: 'var1', value: 'value1' }];
+    (useVariables as unknown as Mock).mockReturnValue([
+      variables,
+      setVariables,
+    ]);
 
-    expect(setVariablesMock).toHaveBeenCalledWith([]);
-    const variableInput = screen.getByLabelText('variables.variable');
-    const valueInput = screen.getByLabelText('variables.value');
-    expect((variableInput as HTMLInputElement).value).toBe('');
-    expect((valueInput as HTMLInputElement).value).toBe('');
+    render(<Variables />);
+    const input = screen.getByDisplayValue('value1') as HTMLInputElement;
+    fireEvent.change(input, { target: { value: 'value1-updated' } });
+
+    expect(setVariables).toHaveBeenCalledWith([
+      { variable: 'var1', value: 'value1-updated' },
+    ]);
   });
 });

@@ -63,7 +63,7 @@ const renderWithRouter = (
   render(
     <MemoryRouter initialEntries={initialEntries}>
       <Routes>
-         <Route path="/" element={ui} />
+        <Route path="/" element={ui} />
       </Routes>
     </MemoryRouter>
   );
