@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Badge } from './badge';
-import '@testing-library/jest-dom';
 
 describe('Badge component', () => {
   it('renders with default variant and tag', () => {

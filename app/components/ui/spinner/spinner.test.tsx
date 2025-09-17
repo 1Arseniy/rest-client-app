@@ -1,9 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Spinner } from './index';
-import '@testing-library/jest-dom';
-
-const getSpinnerByTitle = () => screen.getByTitle(/loading/i);
 
 describe('<Spinner />', () => {
   it('renders default spinner (LoaderIcon)', () => {

@@ -1,45 +1,47 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import { Separator } from './separator';
-import '@testing-library/jest-dom';
+import { describe, it, expect } from 'vitest'
+import { render } from '@testing-library/react'
+import { Separator } from './separator'
 
 describe('<Separator />', () => {
-  it('renders with default props', () => {
-    render(<Separator />);
-    const separator = screen.getByTestId('separator');
+  const getSeparator = (container: HTMLElement) =>
+    container.querySelector('[data-slot="separator"]') as HTMLElement
 
-    expect(separator).toBeInTheDocument();
-    expect(separator).toHaveAttribute('data-orientation', 'horizontal');
-    expect(separator).toHaveAttribute('data-slot', 'separator');
-    expect(separator).toHaveAttribute('aria-orientation', 'horizontal');
-  });
+  it('renders with default props', () => {
+    const { container } = render(<Separator />)
+    const separator = getSeparator(container)
+
+    expect(separator).toBeInTheDocument()
+    expect(separator).toHaveAttribute('data-orientation', 'horizontal')
+    expect(separator).toHaveAttribute('data-slot', 'separator')
+    expect(separator).toHaveAttribute('role', 'none')
+  })
 
   it('renders with vertical orientation', () => {
-    render(<Separator orientation="vertical" />);
-    const separator = screen.getByTestId('separator');
+    const { container } = render(<Separator orientation="vertical" />)
+    const separator = getSeparator(container)
 
-    expect(separator).toHaveAttribute('data-orientation', 'vertical');
-    expect(separator).toHaveAttribute('aria-orientation', 'vertical');
-  });
+    expect(separator).toHaveAttribute('data-orientation', 'vertical')
+  })
 
   it('is decorative by default', () => {
-    render(<Separator />);
-    const separator = screen.getByTestId('separator');
+    const { container } = render(<Separator />)
+    const separator = getSeparator(container)
 
-    expect(separator).toHaveAttribute('data-orientation', 'horizontal');
-    expect(separator).toHaveAttribute('role', 'separator');
-  });
+    expect(separator).toHaveAttribute('role', 'none')
+    expect(separator).toHaveAttribute('data-orientation', 'horizontal')
+  })
 
   it('applies custom class', () => {
-    render(<Separator className="my-custom-class" />);
-    const separator = screen.getByTestId('separator');
+    const { container } = render(<Separator className="my-custom-class" />)
+    const separator = getSeparator(container)
 
-    expect(separator).toHaveClass('my-custom-class');
-  });
+    expect(separator).toHaveClass('my-custom-class')
+  })
 
   it('sets decorative attribute to false', () => {
-    render(<Separator decorative={false} />);
-    const separator = screen.getByTestId('separator');
-    expect(separator).toHaveAttribute('role', 'separator');
-  });
-});
+    const { container } = render(<Separator decorative={false} />)
+    const separator = getSeparator(container)
+
+    expect(separator).toHaveAttribute('role', 'separator')
+  })
+})

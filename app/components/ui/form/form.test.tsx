@@ -10,7 +10,6 @@ import {
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { useForm } from 'react-hook-form';
-import '@testing-library/jest-dom';
 
 type TestFormData = {
   email: string;

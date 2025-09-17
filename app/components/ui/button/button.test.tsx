@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Button } from './button';
-import '@testing-library/jest-dom';
 
 describe('Button component', () => {
   it('renders with default variant and size', () => {
@@ -9,15 +8,20 @@ describe('Button component', () => {
     const button = screen.getByText('Click me');
 
     expect(button.tagName.toLowerCase()).toBe('button');
+    expect(button).toHaveAttribute('data-slot', 'button');
     expect(button).toHaveClass('bg-primary');
     expect(button).toHaveClass('h-9');
-    expect(button).toHaveAttribute('data-slot', 'button');
   });
 
   it('renders with custom variant and size', () => {
-    render(<Button variant="outline" size="sm">Outline Small</Button>);
+    render(
+      <Button variant="outline" size="sm">
+        Outline Small
+      </Button>
+    );
     const button = screen.getByText('Outline Small');
 
+    expect(button).toHaveAttribute('data-slot', 'button');
     expect(button).toHaveClass('border');
     expect(button).toHaveClass('h-8');
   });
@@ -48,5 +52,6 @@ describe('Button component', () => {
 
     expect(button).toBeDisabled();
     expect(button).toHaveClass('disabled:pointer-events-none');
+    expect(button).toHaveClass('disabled:opacity-50');
   });
 });

@@ -5,8 +5,8 @@ import { BrowserRouter } from 'react-router-dom';
 import React from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { registerWithEmailAndPassword } from '../../services/firebase';
-import '@testing-library/jest-dom';
 import type { User } from 'firebase/auth';
+import * as yup from 'yup';
 
 type MockUseAuthStateReturn = [User | null, boolean, Error?];
 const mockedUseAuthState = useAuthState as unknown as vi.Mock<MockUseAuthStateReturn>;
@@ -28,8 +28,6 @@ vi.mock('react-firebase-hooks/auth', () => ({
 }));
 
 vi.mock('@/validation/validation', () => {
-  const yup = require('yup');
-
   const schemaSignup = yup.object().shape({
     name: yup.string().required('Name is required'),
     email: yup.string().email('Invalid email').required('Email is required'),

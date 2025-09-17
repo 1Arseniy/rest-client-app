@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Label } from './label';
-import '@testing-library/jest-dom';
 
 describe('<Label />', () => {
   it('renders with text content', () => {
@@ -34,7 +33,7 @@ describe('<Label />', () => {
       </>
     );
 
-    const label = screen.getByText('Email');
+    const label: HTMLLabelElement = screen.getByText('Email');
     const input = screen.getByTestId('input');
 
     expect(label).toHaveAttribute('for', 'test-input');
