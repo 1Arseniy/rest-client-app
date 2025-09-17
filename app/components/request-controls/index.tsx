@@ -62,7 +62,6 @@ function RequestControls() {
     const encodeBody = toBase64(JSON.stringify(data.body));
     data.headers.forEach((el) => query.append(el.key, toBase64(el.value)));
     let url = data.request;
-    console.log(variables);
 
     for (let i = 0; i < variables.length; i++) {
       if (url.includes(`{{${variables[i].variable}}}`)) {
