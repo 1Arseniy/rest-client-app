@@ -13,7 +13,7 @@ describe('tests RequestControls', () => {
     render(
       <MemoryRouter>
         <I18nextProvider i18n={i18n}>
-          <RequestControls />
+          <RequestControls data={{ status: '', error: '', data: '' }} />
         </I18nextProvider>
       </MemoryRouter>
     );
