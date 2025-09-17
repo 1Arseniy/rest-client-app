@@ -30,7 +30,7 @@ describe('showSonner', () => {
         className: 'bg-green-600 text-white',
         position: 'top-center',
         action: expect.any(Object),
-      }),
+      })
     );
   });
 
@@ -40,7 +40,7 @@ describe('showSonner', () => {
       'Error Title',
       expect.objectContaining({
         className: 'bg-red-600 text-white',
-      }),
+      })
     );
   });
 
@@ -50,7 +50,7 @@ describe('showSonner', () => {
       'Warning Title',
       expect.objectContaining({
         className: 'bg-yellow-500 text-black',
-      }),
+      })
     );
   });
 
@@ -60,7 +60,7 @@ describe('showSonner', () => {
       'Info Title',
       expect.objectContaining({
         className: 'bg-blue-500 text-white',
-      }),
+      })
     );
   });
 

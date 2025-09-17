@@ -9,7 +9,8 @@ import type { User } from 'firebase/auth';
 import * as yup from 'yup';
 
 type MockUseAuthStateReturn = [User | null, boolean, Error?];
-const mockedUseAuthState = useAuthState as unknown as vi.Mock<MockUseAuthStateReturn>;
+const mockedUseAuthState =
+  useAuthState as unknown as vi.Mock<MockUseAuthStateReturn>;
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -31,7 +32,10 @@ vi.mock('@/validation/validation', () => {
   const schemaSignup = yup.object().shape({
     name: yup.string().required('Name is required'),
     email: yup.string().email('Invalid email').required('Email is required'),
-    password: yup.string().min(6, 'Password must be at least 6 characters').required(),
+    password: yup
+      .string()
+      .min(6, 'Password must be at least 6 characters')
+      .required(),
     passwordRepeat: yup
       .string()
       .oneOf([yup.ref('password')], 'Passwords must match')
@@ -69,7 +73,9 @@ describe('<SignUp />', () => {
     expect(screen.getByLabelText('form.labels.name')).toBeInTheDocument();
     expect(screen.getByLabelText('form.labels.email')).toBeInTheDocument();
     expect(screen.getByLabelText('form.labels.password')).toBeInTheDocument();
-    expect(screen.getByLabelText('form.labels.repeatPassword')).toBeInTheDocument();
+    expect(
+      screen.getByLabelText('form.labels.repeatPassword')
+    ).toBeInTheDocument();
   });
 
   it('shows validation errors if fields are empty on submit', async () => {
@@ -102,7 +108,9 @@ describe('<SignUp />', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'auth.signUp' })).not.toBeDisabled();
+      expect(
+        screen.getByRole('button', { name: 'auth.signUp' })
+      ).not.toBeDisabled();
     });
 
     fireEvent.click(screen.getByRole('button', { name: 'auth.signUp' }));

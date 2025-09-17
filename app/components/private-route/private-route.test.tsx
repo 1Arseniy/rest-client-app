@@ -1,31 +1,36 @@
-import { describe, it, vi, beforeEach, expect } from 'vitest';
+import { describe, it, vi, beforeEach, expect, type Mock } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import PrivateRoute from './index';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useNavigate } from 'react-router';
+import * as router from 'react-router';
 
 vi.mock('react-firebase-hooks/auth', () => ({
   useAuthState: vi.fn(),
 }));
 
-vi.mock('react-router', () => {
-  const actual = vi.importActual('react-router');
+vi.mock('react-router', async () => {
+  const actual =
+    await vi.importActual<typeof import('react-router')>('react-router');
+  const navigateMock = vi.fn();
   return {
     ...actual,
-    useNavigate: vi.fn(),
+    useNavigate: () => navigateMock,
+    __navigateMock: navigateMock,
   };
 });
 
-const mockedUseAuthState = useAuthState as unknown as ReturnType<typeof vi.fn>;
-const mockedUseNavigate = useNavigate as unknown as ReturnType<typeof vi.fn>;
+const mockedUseAuthState = useAuthState as unknown as Mock;
+
+type RouterWithMock = typeof router & {
+  __navigateMock: Mock;
+};
+
+const navigateMock = (router as RouterWithMock).__navigateMock;
 
 describe('PrivateRoute', () => {
-  const navigateMock = vi.fn();
-
   beforeEach(() => {
     vi.clearAllMocks();
-    mockedUseNavigate.mockReturnValue(navigateMock);
   });
 
   it('show spinner while loading', () => {

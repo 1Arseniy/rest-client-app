@@ -37,7 +37,9 @@ describe('Card components', () => {
   });
 
   it('renders <CardDescription /> correctly', () => {
-    render(<CardDescription className="desc-class">Description</CardDescription>);
+    render(
+      <CardDescription className="desc-class">Description</CardDescription>
+    );
     const desc = screen.getByText('Description');
     expect(desc).toHaveAttribute('data-slot', 'card-description');
     expect(desc).toHaveClass('desc-class');

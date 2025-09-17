@@ -31,7 +31,9 @@ describe('<Variables />', () => {
 
     fireEvent.click(addBtn);
 
-    expect(screen.getByTestId('fname-error')).toHaveTextContent('variables.errors.empty');
+    expect(screen.getByTestId('fname-error')).toHaveTextContent(
+      'variables.errors.empty'
+    );
     expect(addBtn).toBeDisabled();
   });
 
@@ -76,7 +78,9 @@ describe('<Variables />', () => {
     fireEvent.change(variableInput, { target: { value: 'EXISTING' } });
     fireEvent.change(valueInput, { target: { value: 'VALUE2' } });
 
-    expect(screen.getByTestId('fname-error')).toHaveTextContent('variables.errors.unique');
+    expect(screen.getByTestId('fname-error')).toHaveTextContent(
+      'variables.errors.unique'
+    );
     expect(addBtn).toBeDisabled();
   });
 
@@ -92,7 +96,7 @@ describe('<Variables />', () => {
     }));
 
     render(<Variables />);
-    
+
     const deleteButtons = screen.getAllByRole('button', { name: /trash/i });
     fireEvent.click(deleteButtons[0]);
     expect(setVariablesMock).toHaveBeenCalledWith(
@@ -101,9 +105,7 @@ describe('<Variables />', () => {
   });
 
   it('delete all clears variables and inputs', () => {
-    variablesState = [
-      { variable: 'X', value: 'Y' }
-    ];
+    variablesState = [{ variable: 'X', value: 'Y' }];
     setVariablesMock = vi.fn();
 
     vi.mock('@/hooks/useVariables', () => ({
@@ -112,9 +114,11 @@ describe('<Variables />', () => {
 
     render(<Variables />);
 
-    const deleteAllBtn = screen.getAllByRole('button', { name: /trash/i })[1] || screen.getByText((text: string, element: HTMLElement | null) => {
-      return element?.textContent === '' && element.querySelector('svg'); 
-    });
+    const deleteAllBtn =
+      screen.getAllByRole('button', { name: /trash/i })[1] ||
+      screen.getByText((text: string, element: HTMLElement | null) => {
+        return element?.textContent === '' && element.querySelector('svg');
+      });
 
     fireEvent.click(deleteAllBtn);
 
