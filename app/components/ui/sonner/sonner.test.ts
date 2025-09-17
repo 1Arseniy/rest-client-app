@@ -1,4 +1,3 @@
-// showSonner.test.ts
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { showSonner } from './showSonner';
 import { toast } from 'sonner';
