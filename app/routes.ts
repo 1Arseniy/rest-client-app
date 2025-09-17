@@ -6,7 +6,7 @@ export default [
   route('sign-up', 'routes/sign-up/sign-up.tsx'),
   route('variables', 'routes/variables/index.tsx'),
   route(
-    'rest-client/:method?/:request?/:body?',
+    'rest-client/:method?/:requestUrl?/:body?',
     'routes/rest-client/rest-client.tsx'
   ),
 ] satisfies RouteConfig;
