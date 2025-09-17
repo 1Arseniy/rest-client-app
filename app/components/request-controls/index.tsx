@@ -56,7 +56,7 @@ function RequestControls({ data }: TypeRequestControls) {
 
   const onSubmit: SubmitHandler<TypeRequest> = async (data) => {
     const encodedRequest = toBase64(data.request);
-    const encodeBody = toBase64(data.body);
+    const encodeBody = toBase64(JSON.stringify(data.body, null, 2));
     data.headers.forEach((el) => query.append(el.key, toBase64(el.value)));
     navigate(
       `/rest-client/${data.method}/${encodedRequest}/${encodeBody}?${query}`
