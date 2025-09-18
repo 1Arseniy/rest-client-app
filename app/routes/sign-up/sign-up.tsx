@@ -121,14 +121,14 @@ export default function SignUp() {
 
         <div className="mb-6">
           <Label
-            htmlFor="password-repeated"
+            htmlFor="passwordRepeated"
             className="mb-1 block text-sm font-medium text-gray-700"
           >
             {t('form.labels.repeatPassword')}
           </Label>
           <Input
             {...register('passwordRepeat')}
-            id="passwordRepeat"
+            id="passwordRepeated"
             type="password"
             placeholder={t('form.placeholders.repeatPassword')}
             className="w-full"
