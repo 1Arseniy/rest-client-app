@@ -29,6 +29,20 @@ function RequestControls({ data }: TypeRequestControls) {
   const [searchParams] = useSearchParams();
   const query = new URLSearchParams();
 
+  function replaceVariables(
+    str: string,
+    variables: { variable: string; value: string }[]
+  ) {
+    let result = str;
+    for (let i = 0; i < variables.length; i++) {
+      const { variable, value } = variables[i];
+      if (result.includes(`{{${variable}}}`)) {
+        result = result.replaceAll(`{{${variable}}}`, value);
+      }
+    }
+    return result;
+  }
+
   const getHeaders = Array.from(searchParams.entries()).map(([key, value]) => ({
     key,
     value: returnToString(value),
@@ -57,16 +71,25 @@ function RequestControls({ data }: TypeRequestControls) {
   });
 
   const onSubmit: SubmitHandler<TypeRequest> = async (data) => {
-    let url = data.request;
+    const url = replaceVariables(data.request, variables);
 
-    for (let i = 0; i < variables.length; i++) {
-      if (url.includes(`{{${variables[i].variable}}}`)) {
-        url = url.replace(`{{${variables[i].variable}}}`, variables[i].value);
-      }
-    }
+    const replacedHeaders = data.headers.map((header) => ({
+      key: replaceVariables(header.key, variables),
+      value: replaceVariables(header.value, variables),
+    }));
+
+    const bodyString =
+      typeof data.body === 'string'
+        ? data.body
+        : JSON.stringify(data.body, null, 2);
+
+    const replacedBody = replaceVariables(bodyString, variables);
+
     const encodedRequest = toBase64(url);
-    const encodeBody = toBase64(JSON.stringify(data.body, null, 2));
-    data.headers.forEach((el) => query.append(el.key, toBase64(el.value)));
+    const encodeBody = toBase64(replacedBody);
+
+    replacedHeaders.forEach((el) => query.append(el.key, toBase64(el.value)));
+
     navigate(
       `/rest-client/${data.method}/${encodedRequest}/${encodeBody}?${query}`
     );
