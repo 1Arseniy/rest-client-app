@@ -16,9 +16,9 @@ describe('tests Header', () => {
   it('should show user logo, language toggle, Links: Sign In, Sign Up', () => {
     render(
       <MemoryRouter>
-         <I18nextProvider i18n={i18n}>
-          <Header />  
-         </I18nextProvider>
+        <I18nextProvider i18n={i18n}>
+          <Header />
+        </I18nextProvider>
       </MemoryRouter>
     );
     expect(screen.getByText('Rest Client')).toBeInTheDocument();
