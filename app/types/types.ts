@@ -15,4 +15,5 @@ export interface TypeRequest {
   headers: TypeHeader[];
   body: string;
   typeTextarea: string;
+  language: string;
 }
