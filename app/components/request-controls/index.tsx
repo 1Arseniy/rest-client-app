@@ -36,7 +36,7 @@ function RequestControls({ data, codeSnippet }: TypeRequestControls) {
       key,
       value: returnToString(value),
     }));
-    
+
   function replaceVariables(
     str: string,
     variables: { variable: string; value: string }[]
@@ -50,11 +50,6 @@ function RequestControls({ data, codeSnippet }: TypeRequestControls) {
     }
     return result;
   }
-
-  const getHeaders = Array.from(searchParams.entries()).map(([key, value]) => ({
-    key,
-    value: returnToString(value),
-  }));
 
   const form = useForm<TypeRequest>({
     defaultValues: {
@@ -96,7 +91,7 @@ function RequestControls({ data, codeSnippet }: TypeRequestControls) {
 
     const encodedRequest = toBase64(url);
     const encodeBody = toBase64(replacedBody);
-    
+
     replacedHeaders.forEach((el) => query.append(el.key, toBase64(el.value)));
     query.append('language', toBase64(data.language));
 
