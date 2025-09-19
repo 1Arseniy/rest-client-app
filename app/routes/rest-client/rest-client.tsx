@@ -108,7 +108,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     searchParams.get('language') || toBase64('curl / cURL')
   );
 
-  const { method, requestUrl, body } = params;
+  const { method = 'GET', requestUrl, body } = params;
   const reverseToArr = language.toString().split('/');
 
   const getHeaders = Array.from(searchParams.entries())
@@ -118,7 +118,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       value: returnToString(value),
     }));
 
-  const [data, snippet] = await Promise.all([
+  const [res, snippet] = await Promise.all([
     await getData({ requestUrl, method, headers: getHeaders, body }),
     await generatorSnippet({
       requestUrl,
@@ -128,15 +128,15 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       language: reverseToArr,
     }),
   ]);
-  return { data, snippet };
+  return { res, snippet };
 }
 
 export default function RestClient({ loaderData }: Route.ComponentProps) {
-  const { data, snippet } = loaderData;
+  const { res, snippet } = loaderData;
 
   return (
     <PrivateRoute>
-      <RestClientForm data={data} codeSnippet={snippet} />
+      <RestClientForm data={res} codeSnippet={snippet} />
     </PrivateRoute>
   );
 }

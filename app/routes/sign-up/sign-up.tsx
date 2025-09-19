@@ -144,12 +144,15 @@ export default function SignUp() {
           disabled={!isValid}
           onClick={handleSubmit(onSubmit)}
           variant="outline"
-          className="w-full mb-2"
+          className="w-full mb-2 cursor-pointer"
         >
           {t('auth.signUp')}
         </Button>
         <Link to="/sign-in">
-          <Button variant="link" className="w-full text-center text-gray-500">
+          <Button
+            variant="link"
+            className="cursor-pointer w-full text-center text-gray-500"
+          >
             {t('signUpRoute.linkToSignIn')}
           </Button>
         </Link>

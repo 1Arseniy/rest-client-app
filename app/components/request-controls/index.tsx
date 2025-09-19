@@ -119,7 +119,11 @@ function RequestControls({ data, codeSnippet }: TypeRequestControls) {
               type="text"
               placeholder={t('restClient.request.url')}
             />
-            <Button className="ml-2.5" type="submit">
+            <Button
+              className="ml-2.5"
+              type="submit"
+              disabled={!form.watch('request').length}
+            >
               {t('restClient.request.send')}
             </Button>
           </div>

@@ -4,6 +4,7 @@ import { Textarea } from '../ui/textarea/textarea';
 import type { TypeResponse } from '@/types/types';
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
+import { Spinner } from '../ui/spinner';
 
 function ResponsePanel({ status, data, error }: TypeResponse) {
   const [state, setState] = useState<string | undefined>('');
@@ -22,12 +23,16 @@ function ResponsePanel({ status, data, error }: TypeResponse) {
         <Badge className="mb-1.5">
           {t('restClient.responsePanel.status')}: {!status ? '-' : status}
         </Badge>
-        <Textarea
-          disabled={true}
-          onChange={(e) => setState(e.target.value)}
-          value={state}
-          className={`${error ? 'text-red-500' : ''} w-full  h-80 p-1.5 disabled:cursor-default disabled:opacity-90`}
-        />
+        {!data && !error ? (
+          <Spinner data-testid="spinner" variant="bars" size={54} />
+        ) : (
+          <Textarea
+            disabled={true}
+            onChange={(e) => setState(e.target.value)}
+            value={state}
+            className={`${error ? 'text-red-500' : ''} w-full  h-80 p-1.5 disabled:cursor-default disabled:opacity-90`}
+          />
+        )}
       </div>
     </div>
   );

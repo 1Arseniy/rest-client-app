@@ -37,7 +37,7 @@ function BodyEditor({ register, control, valueBody }: TypePropsBodyEditor) {
                   className="mr-2.5"
                   type="button"
                   onClick={() =>
-                    checkBodyFormat(field.value, valueBody('body'))
+                    checkBodyFormat(field.value, valueBody('body'), t)
                   }
                 >
                   {t('restClient.body.format')}
