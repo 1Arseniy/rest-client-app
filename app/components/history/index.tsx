@@ -1,10 +1,6 @@
-import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth, getRequestHistory } from '@/services/firebase';
-import type { RequestHistory } from '@/types/types';
+import type { RequestHistoryResponse } from '@/types/types';
 import { useTranslation } from 'react-i18next';
-import { Spinner } from '../ui/spinner';
 import {
   formatDuration,
   formatTimestamp,
@@ -15,36 +11,29 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight, faFile } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '../ui/button/button';
 
-function History() {
-  const [user] = useAuthState(auth);
-  const [requestHistory, setRequestHistory] = useState<RequestHistory[]>([]);
-  const [loading, setLoading] = useState(false);
+interface HistoryProps {
+  data: RequestHistoryResponse & { error?: string };
+}
+
+function History({ data }: HistoryProps) {
   const { t } = useTranslation();
+  const { requests: requestHistory, error } = data;
 
-  useEffect(() => {
-    const loadHistory = async () => {
-      if (user) {
-        setLoading(true);
-        try {
-          const historyData = await getRequestHistory(user.uid);
-          setRequestHistory(historyData.requests);
-        } catch (error) {
-          console.error('Error loading request history:', error);
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
-
-    loadHistory();
-  }, [user]);
-
-  if (loading) {
+  if (error) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center flex flex-col items-center justify-center">
-          <Spinner variant="bars" size={54} />
-          <p className="mt-4 text-gray-600">{t('history.loading')}</p>
+          <div className="bg-white rounded-lg shadow-md p-8">
+            <h2 className="text-2xl font-semibold text-red-600 mb-2">
+              {t('history.errorTitle')}
+            </h2>
+            <p className="text-gray-600 mb-4">{error}</p>
+            <Link to="/rest-client">
+              <Button className="text-lg" type="submit">
+                {t('history.restClientButton')}
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     );

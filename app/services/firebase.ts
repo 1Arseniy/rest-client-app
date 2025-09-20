@@ -6,20 +6,9 @@ import {
   signOut,
   updateProfile,
 } from 'firebase/auth';
-import {
-  getFirestore,
-  setDoc,
-  doc,
-  collection,
-  query,
-  where,
-  orderBy,
-  limit,
-  getDocs,
-} from 'firebase/firestore';
+import { getFirestore, setDoc, doc } from 'firebase/firestore';
 
 import { showSonner } from '@/components/ui/sonner/sonner';
-import type { RequestHistory, RequestHistoryResponse } from '@/types/types';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAqbgEqacnW2Bt8gNT1dYSs6dTvID1SNP0',
@@ -83,60 +72,10 @@ const logout = () => {
   signOut(auth);
 };
 
-const getRequestHistory = async (
-  userId: string,
-  limitCount: number = 50
-): Promise<RequestHistoryResponse> => {
-  try {
-    const q = query(
-      collection(db, 'requestHistory'),
-      where('userId', '==', userId),
-      orderBy('requestTimestamp', 'desc'),
-      limit(limitCount)
-    );
-
-    const querySnapshot = await getDocs(q);
-    const requests: RequestHistory[] = [];
-
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      requests.push({
-        id: doc.id,
-        userId: data.userId,
-        method: data.method,
-        url: data.url,
-        headers: data.headers || [],
-        body: data.body || '',
-        typeTextarea: data.typeTextarea || 'json',
-        requestDuration: data.requestDuration || 0,
-        responseStatusCode: data.responseStatusCode || 0,
-        requestTimestamp: data.requestTimestamp || 0,
-        requestSize: data.requestSize || 0,
-        responseSize: data.responseSize || 0,
-        errorDetails: data.errorDetails || null,
-        endpoint: data.endpoint || '',
-      });
-    });
-
-    return {
-      requests,
-      totalCount: requests.length,
-    };
-  } catch (err: unknown) {
-    if (err instanceof FirebaseError) {
-      showSonner('Error', err.message, 'error');
-    } else {
-      showSonner('Error', 'Failed to fetch request history', 'error');
-    }
-    return { requests: [], totalCount: 0 };
-  }
-};
-
 export {
   auth,
   db,
   logInWithEmailAndPassword,
   registerWithEmailAndPassword,
   logout,
-  getRequestHistory,
 };

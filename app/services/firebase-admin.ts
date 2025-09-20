@@ -25,3 +25,47 @@ export const saveRequestHistoryServer = async (
     throw err;
   }
 };
+
+export const getRequestHistoryServer = async (
+  userId: string,
+  limitCount: number = 50
+) => {
+  try {
+    const snapshot = await adminDb
+      .collection('requestHistory')
+      .where('userId', '==', userId)
+      .orderBy('requestTimestamp', 'desc')
+      .limit(limitCount)
+      .get();
+
+    const requests: RequestHistory[] = [];
+
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      requests.push({
+        id: doc.id,
+        userId: data.userId,
+        method: data.method,
+        url: data.url,
+        headers: data.headers || [],
+        body: data.body || '',
+        typeTextarea: data.typeTextarea || 'json',
+        requestDuration: data.requestDuration || 0,
+        responseStatusCode: data.responseStatusCode || 0,
+        requestTimestamp: data.requestTimestamp || 0,
+        requestSize: data.requestSize || 0,
+        responseSize: data.responseSize || 0,
+        errorDetails: data.errorDetails || null,
+        endpoint: data.endpoint || '',
+      });
+    });
+
+    return {
+      requests,
+      totalCount: requests.length,
+    };
+  } catch (err) {
+    console.error('Failed to get request history on server:', err);
+    throw err;
+  }
+};
