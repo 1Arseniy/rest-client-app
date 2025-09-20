@@ -5,7 +5,7 @@ import rssLogo from '@/assets/images/rss-logo.svg';
 
 import { developersLinks } from '@/config/developers';
 
-import '@/components/Footer/Footer.css';
+import '@/components/footer/footer.css';
 
 function Footer() {
   return (
