@@ -5,6 +5,7 @@ import type { TypeResponse } from '@/types/types';
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import { Spinner } from '../ui/spinner';
+import { getStatusColor } from '../history/helpers';
 
 function ResponsePanel({ status, data, error }: TypeResponse) {
   const [state, setState] = useState<string | undefined>('');
@@ -20,7 +21,9 @@ function ResponsePanel({ status, data, error }: TypeResponse) {
         {t('restClient.responsePanel.title')}:
       </div>
       <div>
-        <Badge className="mb-1.5">
+        <Badge
+          className={`mb-1.5 bg-gray-100  ${getStatusColor(Number(status.split(' ')[0]))}`}
+        >
           {t('restClient.responsePanel.status')}: {!status ? '-' : status}
         </Badge>
         {!data && !error ? (
