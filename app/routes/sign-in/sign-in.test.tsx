@@ -56,7 +56,7 @@ vi.mock('@/validation/validation', () => {
   };
 });
 
-const renderWithRouter = (
+export const renderWithRouter = (
   ui: React.ReactElement,
   initialEntries: string[] = ['/']
 ) =>

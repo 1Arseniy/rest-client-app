@@ -47,7 +47,7 @@ export default function SignIn() {
   };
 
   return loading ? (
-    <Spinner variant="bars" size={54} />
+    <Spinner variant="bars" size={54} data-testid="spinner" />
   ) : (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">

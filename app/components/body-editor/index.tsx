@@ -14,6 +14,7 @@ import { FormField } from '../ui/form/form';
 import { Button } from '../ui/button/button';
 import { checkBodyFormat } from '@/utils/check-body-format';
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 
 interface TypePropsBodyEditor {
   register: UseFormRegister<TypeRequest>;
@@ -23,6 +24,8 @@ interface TypePropsBodyEditor {
 
 function BodyEditor({ register, control, valueBody }: TypePropsBodyEditor) {
   const { t } = useTranslation();
+  const [value, setValue] = useState('');
+
   return (
     <div className="flex flex-col mb-5">
       <div className="flex items-center justify-between">
@@ -37,7 +40,10 @@ function BodyEditor({ register, control, valueBody }: TypePropsBodyEditor) {
                   className="mr-2.5"
                   type="button"
                   onClick={() =>
-                    checkBodyFormat(field.value, valueBody('body'), t)
+                    setValue(
+                      checkBodyFormat(field.value, valueBody('body'), t) ||
+                        valueBody('body')
+                    )
                   }
                 >
                   {t('restClient.body.format')}
@@ -49,7 +55,7 @@ function BodyEditor({ register, control, valueBody }: TypePropsBodyEditor) {
                 onValueChange={field.onChange}
               >
                 <SelectTrigger className="w-[130px] mr-2 mb-2">
-                  <SelectValue />
+                  <SelectValue data-testid="select" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -65,8 +71,10 @@ function BodyEditor({ register, control, valueBody }: TypePropsBodyEditor) {
         />
       </div>
       <Textarea
-        placeholder={t('restClient.body.textarea')}
         {...register('body')}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder={t('restClient.body.textarea')}
       />
     </div>
   );

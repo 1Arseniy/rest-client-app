@@ -8,7 +8,7 @@ export function checkBodyFormat(
 ) {
   if (type === 'JSON' && body.length) {
     try {
-      return JSON.stringify(JSON.parse(body));
+      return JSON.stringify(JSON.parse(body), null, 2);
     } catch {
       showSonner(t('sonner.title'), t('sonner.errJSON'), 'error');
     }

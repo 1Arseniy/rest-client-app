@@ -74,7 +74,7 @@ async function generatorSnippet({
       mode: 'raw',
       raw:
         body && method !== 'GET' && method !== 'HEAD'
-          ? returnToString(body)
+          ? JSON.stringify(returnToString(body), null, 2)
           : null,
       options: {
         raw: { language: 'json' },
@@ -108,7 +108,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     searchParams.get('language') || toBase64('curl / cURL')
   );
 
-  const { method = 'GET', requestUrl, body } = params;
+  const { method, requestUrl, body } = params;
   const reverseToArr = language.toString().split('/');
 
   const getHeaders = Array.from(searchParams.entries())
