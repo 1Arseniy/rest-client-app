@@ -5,13 +5,12 @@ import { FormField } from '@/components/ui/form/form';
 import { useFieldArray, useForm, type SubmitHandler } from 'react-hook-form';
 import { useNavigate, useParams, useSearchParams } from 'react-router';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import ResponsePanel from '../response-panel';
 
 import { toBase64, returnToString } from '@/utils/to-base-64';
-import { auth, saveRequestHistory } from '@/services/firebase';
+import { auth } from '@/services/firebase';
 
 import type { TypeResponse, TypeRequest } from '@/types/types';
 import HeadersEditor from '../headers-editor/headers-editor';
@@ -65,9 +64,11 @@ function RequestControls({ data, codeSnippet }: TypeRequestControls) {
       ),
       headers:
         getHeaders.length > 0
-          ? getHeaders
+          ? getHeaders.filter(
+              (item) => item.key !== 'userId' && item.key !== 'typeTextarea'
+            )
           : [{ key: 'Content-Type', value: 'text/plain' }],
-      typeTextarea: 'Text',
+      typeTextarea: searchParams.get('typeTextarea') || 'Text',
       body: returnToString(body ? body : ''),
       language: 'curl / cURL',
     },
@@ -77,49 +78,6 @@ function RequestControls({ data, codeSnippet }: TypeRequestControls) {
     name: 'headers',
     control: form.control,
   });
-
-  useEffect(() => {
-    const saveHistory = async () => {
-      if (user && data && (data.requestDuration !== undefined || data.error)) {
-        try {
-          const currentValues = form.getValues();
-          const url = currentValues.request;
-
-          let processedUrl = url;
-          for (let i = 0; i < variables.length; i++) {
-            if (processedUrl.includes(`{{${variables[i].variable}}}`)) {
-              processedUrl = processedUrl.replace(
-                `{{${variables[i].variable}}}`,
-                variables[i].value
-              );
-            }
-          }
-
-          const endpoint = data.endpoint || new URL(processedUrl).pathname;
-
-          await saveRequestHistory({
-            userId: user.uid,
-            method: currentValues.method,
-            url: processedUrl,
-            headers: currentValues.headers,
-            body: JSON.stringify(currentValues.body, null, 2),
-            typeTextarea: currentValues.typeTextarea,
-            requestDuration: data.requestDuration || 0,
-            responseStatusCode: data.responseStatusCode || 0,
-            requestTimestamp: Date.now() - (data.requestDuration || 0),
-            requestSize: data.requestSize || 0,
-            responseSize: data.responseSize || 0,
-            errorDetails: data.errorDetails || data.error || null,
-            endpoint: endpoint,
-          });
-        } catch (error) {
-          console.error('Failed to save request history:', error);
-        }
-      }
-    };
-
-    saveHistory();
-  }, [data, user, form, variables]);
 
   const onSubmit: SubmitHandler<TypeRequest> = async (data) => {
     const url = replaceVariables(data.request, variables);
@@ -137,10 +95,13 @@ function RequestControls({ data, codeSnippet }: TypeRequestControls) {
     const replacedBody = replaceVariables(bodyString, variables);
 
     const encodedRequest = toBase64(url);
-    const encodeBody = toBase64(replacedBody);
-
+    const encodeBody = toBase64(JSON.stringify(replacedBody, null, 2));
     replacedHeaders.forEach((el) => query.append(el.key, toBase64(el.value)));
     query.append('language', toBase64(data.language));
+
+    if (user) {
+      query.append('userId', user.uid);
+    }
 
     navigate(
       `/rest-client/${data.method}/${encodedRequest}/${encodeBody}?${query}`

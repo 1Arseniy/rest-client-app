@@ -3,6 +3,7 @@ import { lazy } from 'react';
 import PrivateRoute from '@/components/private-route';
 import type { LoaderFunctionArgs } from 'react-router';
 import { returnToString, toBase64 } from '@/utils/to-base-64';
+import { saveRequestHistoryServer } from '@/services/firebase-admin';
 import type { Route } from './+types/rest-client';
 import codegen from 'postman-code-generators';
 import sdk from 'postman-collection';
@@ -19,9 +20,16 @@ interface TypeRequest {
   headers: TypeHeader[];
   body: string | undefined;
   language?: string[] | undefined;
+  userId?: string | null;
 }
 
-async function getData({ method, requestUrl, headers, body }: TypeRequest) {
+async function getData({
+  method,
+  requestUrl,
+  headers,
+  body,
+  userId,
+}: TypeRequest) {
   const startTime = Date.now();
   try {
     const response = await fetch(returnToString(requestUrl ? requestUrl : ''), {
@@ -45,6 +53,28 @@ async function getData({ method, requestUrl, headers, body }: TypeRequest) {
     const requestSize = new Blob([requestBody]).size;
     const endpoint = new URL(returnToString(requestUrl ? requestUrl : ''))
       .pathname;
+
+    if (userId) {
+      try {
+        await saveRequestHistoryServer({
+          userId,
+          method: method || 'GET',
+          url: returnToString(requestUrl ? requestUrl : ''),
+          headers: headers,
+          body: JSON.stringify(JSON.parse(requestBody || '{}'), null, 2),
+          typeTextarea: 'Text',
+          requestDuration: duration,
+          responseStatusCode: response.status,
+          requestTimestamp: Date.now() - duration,
+          requestSize: requestSize,
+          responseSize: responseSize,
+          errorDetails: response.ok ? null : responseText,
+          endpoint: endpoint,
+        });
+      } catch (historyError) {
+        console.error('Failed to save request history:', historyError);
+      }
+    }
 
     if (!response.ok) {
       return {
@@ -79,14 +109,46 @@ async function getData({ method, requestUrl, headers, body }: TypeRequest) {
     const duration = endTime - startTime;
     const errorMessage = err instanceof Error ? err.message : 'Unknown error';
 
+    const requestBody =
+      body && method !== 'GET' && method !== 'HEAD' ? returnToString(body) : '';
+    const requestSize = new Blob([requestBody]).size;
+    const endpoint = requestUrl
+      ? new URL(returnToString(requestUrl)).pathname
+      : '';
+
+    if (userId) {
+      try {
+        await saveRequestHistoryServer({
+          userId,
+          method: method || 'GET',
+          url: returnToString(requestUrl ? requestUrl : ''),
+          headers: headers,
+          body: JSON.stringify(JSON.parse(requestBody || '{}'), null, 2),
+          typeTextarea: 'Text',
+          requestDuration: duration,
+          responseStatusCode: 0,
+          requestTimestamp: Date.now() - duration,
+          requestSize: requestSize,
+          responseSize: 0,
+          errorDetails: errorMessage,
+          endpoint: endpoint,
+        });
+      } catch (historyError) {
+        console.error(
+          'Failed to save request history for error:',
+          historyError
+        );
+      }
+    }
+
     return {
       status: '',
       error: errorMessage,
       requestDuration: duration,
       responseStatusCode: 0,
       responseSize: 0,
-      requestSize: 0,
-      endpoint: '',
+      requestSize: requestSize,
+      endpoint: endpoint,
       errorDetails: errorMessage,
     };
   }
@@ -149,16 +211,17 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const { method, requestUrl, body } = params;
   const reverseToArr = language.toString().split('/');
+  const userId = searchParams.get('userId');
 
   const getHeaders = Array.from(searchParams.entries())
-    .filter(([key]) => key !== 'language')
+    .filter(([key]) => key !== 'language' && key !== 'userId')
     .map(([key, value]) => ({
       key,
       value: returnToString(value),
     }));
 
   const [res, snippet] = await Promise.all([
-    await getData({ requestUrl, method, headers: getHeaders, body }),
+    await getData({ requestUrl, method, headers: getHeaders, body, userId }),
     await generatorSnippet({
       requestUrl,
       method,
