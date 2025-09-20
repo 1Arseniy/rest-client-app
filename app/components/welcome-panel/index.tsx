@@ -34,7 +34,7 @@ function WelcomePanel() {
             <Link className="hover:underline mr-4" to={'/rest-client'}>
               {t('auth.restClient')}
             </Link>
-            <Link className="hover:underline mr-4" to={''}>
+            <Link className="hover:underline mr-4" to={'/history'}>
               {t('auth.history')}
             </Link>
             <Link className="hover:underline" to={'/variables'}>
