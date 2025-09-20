@@ -11,7 +11,6 @@ import {
   setDoc,
   doc,
   collection,
-  addDoc,
   query,
   where,
   orderBy,
@@ -84,24 +83,6 @@ const logout = () => {
   signOut(auth);
 };
 
-const saveRequestHistory = async (requestData: Omit<RequestHistory, 'id'>) => {
-  try {
-    const docRef = await addDoc(collection(db, 'requestHistory'), {
-      ...requestData,
-      errorDetails: requestData.errorDetails || null,
-      createdAt: Date.now(),
-    });
-    return docRef.id;
-  } catch (err: unknown) {
-    if (err instanceof FirebaseError) {
-      showSonner('Error', err.message, 'error');
-    } else {
-      showSonner('Error', 'Failed to save request history', 'error');
-    }
-    throw err;
-  }
-};
-
 const getRequestHistory = async (
   userId: string,
   limitCount: number = 50
@@ -157,6 +138,5 @@ export {
   logInWithEmailAndPassword,
   registerWithEmailAndPassword,
   logout,
-  saveRequestHistory,
   getRequestHistory,
 };
