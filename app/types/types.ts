@@ -7,6 +7,12 @@ export interface TypeResponse {
   status: string;
   data?: string;
   error?: string;
+  requestDuration?: number;
+  responseStatusCode?: number;
+  responseSize?: number;
+  requestSize?: number;
+  endpoint?: string;
+  errorDetails?: string;
 }
 
 export interface TypeRequest {
@@ -16,4 +22,26 @@ export interface TypeRequest {
   body: string;
   typeTextarea: string;
   language: string;
+}
+
+export interface RequestHistory {
+  id: string;
+  userId: string;
+  method: string;
+  url: string;
+  headers: TypeHeader[];
+  body: string;
+  typeTextarea: string;
+  requestDuration: number;
+  responseStatusCode: number;
+  requestTimestamp: number;
+  requestSize: number;
+  responseSize: number;
+  errorDetails: string | null;
+  endpoint: string;
+}
+
+export interface RequestHistoryResponse {
+  requests: RequestHistory[];
+  totalCount: number;
 }

@@ -22,6 +22,7 @@ interface TypeRequest {
 }
 
 async function getData({ method, requestUrl, headers, body }: TypeRequest) {
+  const startTime = Date.now();
   try {
     const response = await fetch(returnToString(requestUrl ? requestUrl : ''), {
       method,
@@ -34,23 +35,61 @@ async function getData({ method, requestUrl, headers, body }: TypeRequest) {
           ? returnToString(body)
           : null,
     });
+    const endTime = Date.now();
+    const duration = endTime - startTime;
+
+    const responseText = await response.text();
+    const responseSize = new Blob([responseText]).size;
+    const requestBody =
+      body && method !== 'GET' && method !== 'HEAD' ? returnToString(body) : '';
+    const requestSize = new Blob([requestBody]).size;
+    const endpoint = new URL(returnToString(requestUrl ? requestUrl : ''))
+      .pathname;
+
     if (!response.ok) {
       return {
         status: `${response.status} ${response.statusText}`,
-        error: await response.text(),
+        error: responseText,
+        requestDuration: duration,
+        responseStatusCode: response.status,
+        responseSize: responseSize,
+        requestSize: requestSize,
+        endpoint: endpoint,
       };
     }
-    const data = JSON.stringify(await response.json(), null, 8);
+
+    let data;
+    try {
+      data = JSON.stringify(JSON.parse(responseText), null, 8);
+    } catch {
+      data = responseText;
+    }
+
     return {
       status: `${response.status} ${response.statusText}`,
       data,
+      requestDuration: duration,
+      responseStatusCode: response.status,
+      responseSize: responseSize,
+      requestSize: requestSize,
+      endpoint: endpoint,
     };
   } catch (err) {
-    if (err instanceof Error) {
-      return { status: '', error: err.message };
-    }
+    const endTime = Date.now();
+    const duration = endTime - startTime;
+    const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+
+    return {
+      status: '',
+      error: errorMessage,
+      requestDuration: duration,
+      responseStatusCode: 0,
+      responseSize: 0,
+      requestSize: 0,
+      endpoint: '',
+      errorDetails: errorMessage,
+    };
   }
-  return { status: '' };
 }
 
 async function generatorSnippet({

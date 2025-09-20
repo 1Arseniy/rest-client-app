@@ -120,5 +120,18 @@
   "sonner": {
     "title": "Ошибка",
     "errJSON": "Неверный формат JSON"
+  },
+  "history": {
+    "title": "История запросов",
+    "emptyTitle": "Вы еще не выполнили ни одного запроса",
+    "emptySubtitle": "Здесь пусто. Попробуйте эти варианты:",
+    "restClientButton": "REST-КЛИЕНТ",
+    "loading": "Загрузка истории запросов...",
+    "requestSize": "Запрос",
+    "responseSize": "Ответ",
+    "duration": "Длительность",
+    "timestamp": "Время",
+    "statusCode": "Статус",
+    "error": "Ошибка"
   }
 }
