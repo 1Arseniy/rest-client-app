@@ -61,9 +61,11 @@ function RequestControls({ data }: TypeRequestControls) {
       ),
       headers:
         getHeaders.length > 0
-          ? getHeaders
+          ? getHeaders.filter(
+              (item) => item.key !== 'userId' && item.key !== 'typeTextarea'
+            )
           : [{ key: 'Content-Type', value: 'text/plain' }],
-      typeTextarea: 'Text',
+      typeTextarea: searchParams.get('typeTextarea') || 'Text',
       body: returnToString(body ? body : ''),
     },
   });

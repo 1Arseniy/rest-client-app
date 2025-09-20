@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
-import type { RequestHistoryResponse } from '@/types/types';
+import type { RequestHistoryResponse, RequestHistory } from '@/types/types';
 import { useTranslation } from 'react-i18next';
+import { toBase64 } from '@/utils/to-base-64';
 import {
   formatDuration,
   formatTimestamp,
@@ -18,6 +19,25 @@ interface HistoryProps {
 function History({ data }: HistoryProps) {
   const { t } = useTranslation();
   const { requests: requestHistory, error } = data;
+
+  const generateRestoreUrl = (request: RequestHistory) => {
+    const encodedUrl = toBase64(request.url);
+    const encodedBody = toBase64(request.body);
+    const query = new URLSearchParams();
+
+    request.headers.forEach((header) => {
+      query.append(header.key, toBase64(header.value));
+    });
+
+    query.append('typeTextarea', request.typeTextarea || 'Text');
+
+    const userId = new URLSearchParams(window.location.search).get('userId');
+    if (userId) {
+      query.append('userId', userId);
+    }
+
+    return `/rest-client/${request.method}/${encodedUrl}/${encodedBody}?${query}`;
+  };
 
   if (error) {
     return (
@@ -84,7 +104,10 @@ function History({ data }: HistoryProps) {
                   key={request.id}
                   className="p-6 hover:bg-gray-50 transition-colors"
                 >
-                  <Link to={'/rest-client'} className="block group">
+                  <Link
+                    to={generateRestoreUrl(request)}
+                    className="block group"
+                  >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-4">
                         <span

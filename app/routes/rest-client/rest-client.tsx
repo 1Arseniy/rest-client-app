@@ -23,7 +23,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     value: returnToString(value),
   }));
 
-  const requestHeaders = getHeaders.filter((header) => header.key !== 'userId');
+  const requestHeaders = getHeaders.filter(
+    (header) => header.key !== 'userId' && header.key !== 'typeTextarea'
+  );
 
   try {
     const response = await fetch(returnToString(requestUrl ? requestUrl : ''), {
