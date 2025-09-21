@@ -8,3 +8,10 @@ Before running the project make sure you have `credentials.json` file in the roo
 export GOOGLE_APPLICATION_CREDENTIALS=credentials.json
 npm run dev
 ```
+
+If you are use Windows:
+
+```bash
+$env:GOOGLE_APPLICATION_CREDENTIALS="credentials.json"
+npm run dev
+```
