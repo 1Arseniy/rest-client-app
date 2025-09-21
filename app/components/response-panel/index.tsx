@@ -1,0 +1,44 @@
+import { Badge } from '@/components/ui/badge/badge';
+import { Textarea } from '../ui/textarea/textarea';
+
+import type { TypeResponse } from '@/types/types';
+import { useTranslation } from 'react-i18next';
+import { useState, useEffect } from 'react';
+import { Spinner } from '../ui/spinner';
+import { getStatusColor } from '../history/helpers';
+
+function ResponsePanel({ status, data, error }: TypeResponse) {
+  const [state, setState] = useState<string | undefined>('');
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    setState(error ? error : data);
+  }, [error, data]);
+
+  return (
+    <div className="w-full pt-11 pb-11 pl-5 pr-5">
+      <div className="flex justify-center text-2xl">
+        {t('restClient.responsePanel.title')}:
+      </div>
+      <div>
+        <Badge
+          className={`mb-1.5 bg-gray-100  ${getStatusColor(Number(status.split(' ')[0]))}`}
+        >
+          {t('restClient.responsePanel.status')}: {!status ? '-' : status}
+        </Badge>
+        {!data && !error ? (
+          <Spinner data-testid="spinner" variant="bars" size={54} />
+        ) : (
+          <Textarea
+            disabled={true}
+            onChange={(e) => setState(e.target.value)}
+            value={state}
+            className={`${error ? 'text-red-500' : ''} w-full  h-80 p-1.5 disabled:cursor-default disabled:opacity-90`}
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default ResponsePanel;

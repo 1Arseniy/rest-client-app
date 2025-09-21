@@ -1,0 +1,10 @@
+.header {
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.scroll {
+  background-color: var(--color-foreground);
+  color: var(--color-white);
+}
