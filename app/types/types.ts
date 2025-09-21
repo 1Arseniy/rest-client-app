@@ -21,6 +21,7 @@ export interface TypeRequest {
   headers: TypeHeader[];
   body: string;
   typeTextarea: string;
+  language: string;
 }
 
 export interface RequestHistory {

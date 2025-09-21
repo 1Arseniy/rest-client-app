@@ -12,7 +12,6 @@ export function createI18nInstance(lang: 'en' | 'ru' = 'en') {
   }
 
   clientI18n = i18n.createInstance();
-
   clientI18n.use(initReactI18next).init({
     resources: {
       en: { translation: en },

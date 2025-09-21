@@ -117,6 +117,10 @@
     "toMain": "To main page",
     "message": "The requested page could not be found"
   },
+  "sonner": {
+    "title": "Error",
+    "errJSON": "Invalid JSON Format"
+  },
   "history": {
     "title": "History Requests",
     "emptyTitle": "You haven't executed any requests yet",

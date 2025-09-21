@@ -200,7 +200,7 @@ export default function Variables() {
             disabled={error ? true : false}
             onClick={handleAdd}
             variant="outline"
-            className="w-full"
+            className="w-full cursor-pointer"
           >
             {t('variables.add')}
           </Button>
