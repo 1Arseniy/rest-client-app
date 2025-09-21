@@ -8,23 +8,32 @@ import {
   SelectValue,
 } from '@/components/ui/select/select';
 
-import type { Control, UseFormRegister, UseFormWatch } from 'react-hook-form';
+import type {
+  Control,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormWatch,
+} from 'react-hook-form';
 import type { TypeRequest } from '@/types/types';
 import { FormField } from '../ui/form/form';
 import { Button } from '../ui/button/button';
 import { checkBodyFormat } from '@/utils/check-body-format';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
 
 interface TypePropsBodyEditor {
   register: UseFormRegister<TypeRequest>;
   control: Control<TypeRequest, unknown, TypeRequest>;
   valueBody: UseFormWatch<TypeRequest>;
+  setValue: UseFormSetValue<TypeRequest>;
 }
 
-function BodyEditor({ register, control, valueBody }: TypePropsBodyEditor) {
+function BodyEditor({
+  register,
+  control,
+  valueBody,
+  setValue,
+}: TypePropsBodyEditor) {
   const { t } = useTranslation();
-  const [value, setValue] = useState('');
 
   return (
     <div className="flex flex-col mb-5">
@@ -41,6 +50,7 @@ function BodyEditor({ register, control, valueBody }: TypePropsBodyEditor) {
                   type="button"
                   onClick={() =>
                     setValue(
+                      'body',
                       checkBodyFormat(field.value, valueBody('body'), t) ||
                         valueBody('body')
                     )
@@ -72,8 +82,6 @@ function BodyEditor({ register, control, valueBody }: TypePropsBodyEditor) {
       </div>
       <Textarea
         {...register('body')}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
         placeholder={t('restClient.body.textarea')}
       />
     </div>

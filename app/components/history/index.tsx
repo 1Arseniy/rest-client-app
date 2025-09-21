@@ -22,7 +22,8 @@ function History({ data }: HistoryProps) {
 
   const generateRestoreUrl = (request: RequestHistory) => {
     const encodedUrl = toBase64(request.url);
-    const encodedBody = toBase64(request.body);
+
+    const encodedBody = toBase64(JSON.stringify(request.body, null, 2));
     const query = new URLSearchParams();
 
     request.headers.forEach((header) => {

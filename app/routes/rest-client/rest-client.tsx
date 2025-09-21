@@ -31,6 +31,7 @@ async function getData({
   userId,
 }: TypeRequest) {
   const startTime = Date.now();
+
   try {
     const response = await fetch(returnToString(requestUrl ? requestUrl : ''), {
       method,
@@ -165,6 +166,7 @@ async function generatorSnippet({
     indentCount: 3,
     indentType: 'Space',
   };
+
   const response = new sdk.Request({
     url: returnToString(requestUrl ? requestUrl : ''),
     method: method,

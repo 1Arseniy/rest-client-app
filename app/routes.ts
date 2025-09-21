@@ -7,7 +7,7 @@ export default [
   route('variables', 'routes/variables/index.tsx'),
   route('history', 'routes/history/index.tsx'),
   route(
-    'rest-client/:method?/:requestUrl?/:body?/:language?',
+    'rest-client/:method?/:requestUrl?/:body?',
     'routes/rest-client/rest-client.tsx'
   ),
 ] satisfies RouteConfig;

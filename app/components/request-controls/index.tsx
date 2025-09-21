@@ -142,6 +142,7 @@ function RequestControls({ data, codeSnippet }: TypeRequestControls) {
             remove={remove}
           />
           <BodyEditor
+            setValue={form.setValue}
             control={form.control}
             register={form.register}
             valueBody={form.watch}
