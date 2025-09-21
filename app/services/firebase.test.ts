@@ -12,7 +12,6 @@ vi.mock('firebase/firestore');
 vi.mock('@/components/ui/sonner/sonner');
 
 describe('Firebase service', () => {
-
   beforeEach(() => {
     vi.clearAllMocks();
   });
