@@ -1,6 +1,6 @@
-import { it, describe, vi } from 'vitest';
-import { render } from '@testing-library/react';
-import RestClient from './rest-client';
+import { it, expect, describe, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import History from '@/routes/history/index';
 import '@testing-library/jest-dom/vitest';
 import { createRoutesStub } from 'react-router';
 
@@ -17,15 +17,16 @@ vi.mock('react-router', async () => {
   };
 });
 
-describe('tests RestClient', () => {
+describe('tests History', () => {
   const Stub = createRoutesStub([
     {
-      path: '/rest-client',
-      Component: RestClient,
+      path: '/history',
+      Component: History,
     },
   ]);
 
-  it('should show spinner', () => {
-    render(<Stub initialEntries={['/rest-client']} />);
+  it('should show spinner ', () => {
+    render(<Stub initialEntries={['/history']} />);
+    expect(screen.getByTitle(/loading/i)).toBeInTheDocument();
   });
 });
