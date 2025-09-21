@@ -3,5 +3,9 @@ export function toBase64(request: string) {
 }
 
 export function returnToString(decodeStr: string) {
-  return decodeURIComponent(atob(decodeStr));
+  try {
+    return JSON.parse(decodeURIComponent(atob(decodeStr)));
+  } catch {
+    return decodeURIComponent(atob(decodeStr));
+  }
 }

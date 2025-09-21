@@ -16,6 +16,7 @@ describe('tests BodyEditor', () => {
       <MemoryRouter>
         <I18nextProvider i18n={i18n}>
           <BodyEditor
+            setValue={result.current.setValue}
             register={mockFunc}
             valueBody={mockFunc}
             control={result.current.control}

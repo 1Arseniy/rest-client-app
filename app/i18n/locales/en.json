@@ -116,5 +116,22 @@
   "page404": {
     "toMain": "To main page",
     "message": "The requested page could not be found"
+  },
+  "sonner": {
+    "title": "Error",
+    "errJSON": "Invalid JSON Format"
+  },
+  "history": {
+    "title": "History Requests",
+    "emptyTitle": "You haven't executed any requests yet",
+    "emptySubtitle": "It's empty here. Try those options:",
+    "restClientButton": "REST CLIENT",
+    "loading": "Loading request history...",
+    "requestSize": "Request",
+    "responseSize": "Response",
+    "duration": "Duration",
+    "timestamp": "Time",
+    "statusCode": "Status",
+    "error": "Error"
   }
 }

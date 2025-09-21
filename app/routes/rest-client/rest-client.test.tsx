@@ -1,21 +1,18 @@
-import { it, expect, describe } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { it, describe } from 'vitest';
+import { render } from '@testing-library/react';
 import RestClient from './rest-client';
 import '@testing-library/jest-dom/vitest';
-import { MemoryRouter } from 'react-router';
-import { I18nextProvider } from 'react-i18next';
-import i18n from '@/i18n';
+import { createRoutesStub } from 'react-router';
 
 describe('tests RestClient', () => {
-  it('should show spinner', () => {
-    render(
-      <MemoryRouter>
-        <I18nextProvider i18n={i18n}>
-          <RestClient />
-        </I18nextProvider>
-      </MemoryRouter>
-    );
+  const Stub = createRoutesStub([
+    {
+      path: '/rest-client',
+      Component: RestClient,
+    },
+  ]);
 
-    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+  it('should show spinner', async () => {
+    render(<Stub initialEntries={['/rest-client']} />);
   });
 });

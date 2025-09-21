@@ -1,10 +1,10 @@
 export const programmingLanguages = [
-  'curl',
-  'JavaScript (Fetch api)',
-  'JavaScript (XHR)',
-  'NodeJS',
-  'Python',
-  'Java',
-  'C#',
-  'Go',
+  'curl / cURL',
+  'JavaScript / Fetch',
+  'JavaScript / XHR',
+  'NodeJS / Axios',
+  'Python / Requests',
+  'Java / OkHttp',
+  'csharp / RestSharp',
+  'Go / Native',
 ];

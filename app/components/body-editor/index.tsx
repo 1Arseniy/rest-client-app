@@ -8,7 +8,12 @@ import {
   SelectValue,
 } from '@/components/ui/select/select';
 
-import type { Control, UseFormRegister, UseFormWatch } from 'react-hook-form';
+import type {
+  Control,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormWatch,
+} from 'react-hook-form';
 import type { TypeRequest } from '@/types/types';
 import { FormField } from '../ui/form/form';
 import { Button } from '../ui/button/button';
@@ -19,10 +24,17 @@ interface TypePropsBodyEditor {
   register: UseFormRegister<TypeRequest>;
   control: Control<TypeRequest, unknown, TypeRequest>;
   valueBody: UseFormWatch<TypeRequest>;
+  setValue: UseFormSetValue<TypeRequest>;
 }
 
-function BodyEditor({ register, control, valueBody }: TypePropsBodyEditor) {
+function BodyEditor({
+  register,
+  control,
+  valueBody,
+  setValue,
+}: TypePropsBodyEditor) {
   const { t } = useTranslation();
+
   return (
     <div className="flex flex-col mb-5">
       <div className="flex items-center justify-between">
@@ -37,7 +49,11 @@ function BodyEditor({ register, control, valueBody }: TypePropsBodyEditor) {
                   className="mr-2.5"
                   type="button"
                   onClick={() =>
-                    checkBodyFormat(field.value, valueBody('body'))
+                    setValue(
+                      'body',
+                      checkBodyFormat(field.value, valueBody('body'), t) ||
+                        valueBody('body')
+                    )
                   }
                 >
                   {t('restClient.body.format')}
@@ -49,7 +65,7 @@ function BodyEditor({ register, control, valueBody }: TypePropsBodyEditor) {
                 onValueChange={field.onChange}
               >
                 <SelectTrigger className="w-[130px] mr-2 mb-2">
-                  <SelectValue />
+                  <SelectValue data-testid="select" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -65,8 +81,8 @@ function BodyEditor({ register, control, valueBody }: TypePropsBodyEditor) {
         />
       </div>
       <Textarea
-        placeholder={t('restClient.body.textarea')}
         {...register('body')}
+        placeholder={t('restClient.body.textarea')}
       />
     </div>
   );
