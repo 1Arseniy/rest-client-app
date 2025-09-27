@@ -4,7 +4,7 @@ import { Label } from '@/components/ui/label/label';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Separator } from '@/components/ui/separator';
+import { Separator } from '@/components/ui/separator/separator';
 import useVariables from '@/hooks/useVariables';
 import { useEffect, useState } from 'react';
 

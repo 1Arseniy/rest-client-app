@@ -6,11 +6,20 @@ import '@/components/header/header.css';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, logout } from '@/services/firebase';
 import LanguageSelect from '../ui/select/language-select';
-import { useTranslation } from 'react-i18next';
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetFooter,
+  SheetTrigger,
+} from '@/components/ui/sheet/sheet';
+import { Button } from '@/components/ui/button/button';
+import AuthLinks from '@/components/header/auth-links';
 
 function Header() {
   const [scrollY, setScrollY] = useState(0);
-  const { t } = useTranslation();
+  // const [isOpen] = useState('closed');
+
   useEffect(() => {
     const changeScroll = () => {
       setScrollY(window.scrollY);
@@ -25,6 +34,10 @@ function Header() {
     logout();
   };
 
+  // const checkIsOpen = (e: MouseEvent<HTMLButtonElement>) => {
+  //   console.log(e.currentTarget.dataset);
+  // };
+
   return (
     <div
       className={`${scrollY && 'scroll'} header sticky top-0 left-0 flex justify-between items-center pt-2.5 pb-2.5 pr-4 pl-4`}
@@ -36,25 +49,23 @@ function Header() {
 
         <LanguageSelect scrollY={scrollY} />
       </header>
-      {user ? (
-        <div>
-          <Link className="hover:underline mr-5" to="/">
-            {t('auth.mainPage')}
-          </Link>
-          <Link onClick={handleClick} className="hover:underline mr-5" to="/">
-            {t('auth.signOut')}
-          </Link>
-        </div>
-      ) : (
-        <div>
-          <Link className="hover:underline mr-5" to="/sign-in">
-            {t('auth.signIn')}
-          </Link>
-          <Link className="hover:underline" to="/sign-up">
-            {t('auth.signUp')}
-          </Link>
-        </div>
-      )}
+      <AuthLinks user={user} logOut={handleClick} />
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button>Open</Button>
+        </SheetTrigger>
+        <SheetContent>
+          {/* <SheetHeader> */}
+          <AuthLinks user={user} logOut={handleClick} />
+          {/* <span>a</span> */}
+          {/* </SheetHeader> */}
+          <SheetFooter>
+            <SheetClose asChild>
+              <Button variant="outline">Close</Button>
+            </SheetClose>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }
