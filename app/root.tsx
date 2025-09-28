@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import {
   isRouteErrorResponse,
   Links,
@@ -7,15 +8,17 @@ import {
   ScrollRestoration,
   type LoaderFunctionArgs,
   Link,
+  useLoaderData,
 } from 'react-router';
 import type { Route } from './+types/root';
 import Footer from '@/components/footer';
 import Header from '@/components/header';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import '@/styles/app.css';
-import { useTranslation } from 'react-i18next';
-import React from 'react';
+import { I18nextProvider, useTranslation } from 'react-i18next';
 import { Toaster } from 'sonner';
+import type { i18n as I18nType } from 'i18next';
+import { createI18nInstance } from './i18n';
 
 type LoaderData = {
   lang: 'en' | 'ru';
@@ -52,14 +55,14 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  // const { lang } = useLoaderData<typeof loader>() || { lang: 'en' };
-  // const [i18nInstance, setI18nInstance] = useState<I18nType | null>(null);
+  const { lang } = useLoaderData<typeof loader>() || { lang: 'en' };
+  const [i18nInstance, setI18nInstance] = useState<I18nType | null>(null);
 
-  // useEffect(() => {
-  //   const instance = createI18nInstance(lang);
-  //   setI18nInstance(instance);
-  //   document.documentElement.lang = lang;
-  // }, [lang]);
+  useEffect(() => {
+    const instance = createI18nInstance(lang);
+    setI18nInstance(instance);
+    document.documentElement.lang = lang;
+  }, [lang]);
 
   return (
     <html lang="en">
@@ -76,15 +79,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="w-full max-w-[1440px] m-auto">
-        <Header />
-        {children}
-        <Footer />
-        <ScrollRestoration />
-        <Scripts />
-        <Toaster />
-        {/* {i18nInstance ? (
+        {i18nInstance ? (
           <I18nextProvider i18n={i18nInstance}>
-         
+            <Header />
+            {children}
+            <Footer />
+            <ScrollRestoration />
+            <Scripts />
+            <Toaster />
           </I18nextProvider>
         ) : (
           <div>
@@ -95,7 +97,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <Scripts />
             <Toaster />
           </div>
-        )} */}
+        )}
       </body>
     </html>
   );

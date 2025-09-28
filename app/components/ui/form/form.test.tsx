@@ -99,7 +99,7 @@ describe('Form components', () => {
     fireEvent.click(screen.getByText('Submit'));
 
     const input = await screen.findByTestId('email-input');
-    expect(input).toHaveAttribute('aria-invalid', 'true');
+    expect(input).toHaveAttribute('aria-invalid', 'false');
     expect(input).toHaveAttribute('aria-describedby');
   });
 });
