@@ -10,6 +10,7 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
+  SheetDescription,
   SheetFooter,
   SheetTitle,
   SheetTrigger,
@@ -34,7 +35,6 @@ function Header() {
   const handleClick = () => {
     logout();
   };
-
   return (
     <div
       className={`${scrollY && 'scroll'} header sticky top-0 left-0 flex justify-between items-center pt-2.5 pb-2.5 pr-4 pl-4`}
@@ -47,7 +47,7 @@ function Header() {
         <LanguageSelect scrollY={scrollY} />
       </header>
       <div className="nav">
-        <AuthLinks user={user} logOut={handleClick} />
+        <AuthLinks user={user} logOut={handleClick} scrollY={scrollY} />
       </div>
 
       <Sheet>
@@ -61,9 +61,10 @@ function Header() {
           </div>
         </SheetTrigger>
         <SheetContent>
-          <SheetTitle>dddd</SheetTitle>
-          <div className="text-3xl">
-            <AuthLinks user={user} logOut={handleClick} />
+          <SheetTitle></SheetTitle>
+          <SheetDescription></SheetDescription>
+          <div className="text-2xl flex flex-col justify-center h-full items-center gap-5">
+            <AuthLinks user={user} logOut={handleClick} scrollY={scrollY} />
           </div>
           <SheetFooter>
             <SheetClose asChild>

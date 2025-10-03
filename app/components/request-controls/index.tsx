@@ -18,6 +18,7 @@ import MethodsSelect from '../ui/select/methods-select';
 import BodyEditor from '../body-editor';
 import CodeRequest from '../code-request';
 import useVariables from '@/hooks/useVariables';
+import getHeaders from '@/utils/getHeaders';
 
 interface TypeRequestControls {
   data: TypeResponse;
@@ -31,14 +32,9 @@ function RequestControls({ data, codeSnippet }: TypeRequestControls) {
   const [user] = useAuthState(auth);
   const { method, requestUrl, body } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const query = new URLSearchParams();
+  const headers = getHeaders(searchParams);
 
-  const getHeaders = Array.from(searchParams.entries())
-    .filter(([key]) => key !== 'language')
-    .map(([key, value]) => ({
-      key,
-      value: returnToString(value),
-    }));
+  const query = new URLSearchParams();
 
   function replaceVariables(
     str: string,
@@ -63,8 +59,8 @@ function RequestControls({ data, codeSnippet }: TypeRequestControls) {
           : toBase64('https://jsonplaceholder.typicode.com/todos/')
       ),
       headers:
-        getHeaders.length > 0
-          ? getHeaders.filter(
+        headers.length > 0
+          ? headers.filter(
               (item) => item.key !== 'userId' && item.key !== 'typeTextarea'
             )
           : [{ key: 'Content-Type', value: 'text/plain' }],

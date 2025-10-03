@@ -136,7 +136,7 @@ export default function Variables() {
   ));
   return (
     <>
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 pt-5 pb-5 pr-2.5 pl-2.5">
         <div className="w-full max-w-2xl rounded-2xl bg-white p-10 shadow-lg">
           <h2 className="mb-6 text-center text-3xl font-bold text-gray-800">
             {t('variables.variables')}

@@ -1,14 +1,16 @@
 import type { User } from 'firebase/auth';
 import { useTranslation } from 'react-i18next';
 
-import { Link, NavLink } from 'react-router';
+import { NavLink } from 'react-router';
+import { Button } from '../ui/button/button';
 
 interface TypePropsAuthLinks {
   user: User | null | undefined;
   logOut: () => void;
+  scrollY: number;
 }
 
-function AuthLinks({ user, logOut }: TypePropsAuthLinks) {
+function AuthLinks({ user, logOut, scrollY }: TypePropsAuthLinks) {
   const { t } = useTranslation();
 
   return (
@@ -17,24 +19,45 @@ function AuthLinks({ user, logOut }: TypePropsAuthLinks) {
         <>
           <NavLink
             className={({ isActive }) =>
-              isActive ? 'border-b-2  mr-5' : 'border-b-0 hover:border-b-2 mr-5'
+              isActive
+                ? 'border-b-2  mr-5'
+                : 'hover:border-b-2 mr-5 max-md:border-b-2 max-md:border-b-transparent'
             }
             to="/"
           >
             {t('auth.mainPage')}
           </NavLink>
-          <Link onClick={logOut} className="hover:underline mr-5" to="/">
-            {t('auth.signOut')}
-          </Link>
+          <Button
+            asChild
+            className={`${scrollY && 'bg-white text-black transition duration-300 hover:bg-gray-100'}`}
+          >
+            <NavLink onClick={logOut} to="/">
+              {t('auth.signOut')}
+            </NavLink>
+          </Button>
         </>
       ) : (
         <>
-          <Link className="hover:underline mr-5" to="/sign-in">
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? 'border-b-2  mr-5'
+                : 'hover:border-b-2 mr-5 max-md:border-b-2 max-md:border-b-transparent'
+            }
+            to="/sign-in"
+          >
             {t('auth.signIn')}
-          </Link>
-          <Link className="hover:underline" to="/sign-up">
+          </NavLink>
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? 'border-b-2  mr-5'
+                : 'hover:border-b-2 mr-5 max-md:border-b-2 max-md:border-b-transparent'
+            }
+            to="/sign-up"
+          >
             {t('auth.signUp')}
-          </Link>
+          </NavLink>
         </>
       )}
     </>
