@@ -7,7 +7,5 @@
         "distDir": "build/client"
       }
     }
-  ],
-  "ignore": ["*.test.tsx", "**/*.test.tsx"],
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  ]
 }
