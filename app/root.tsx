@@ -20,11 +20,6 @@ import { Toaster } from 'sonner';
 import type { i18n as I18nType } from 'i18next';
 import { createI18nInstance } from './i18n';
 
-type LoaderData = {
-  lang: 'en' | 'ru';
-  i18nInstance: I18nType;
-};
-
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
   {
@@ -70,13 +65,15 @@ export async function loader({
 const I18nContext = createContext<I18nType | null>(null);
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const { lang } = useLoaderData<LoaderData>();
+  const { lang } = useLoaderData<{ lang: string }>();
   const [i18nInstance, setI18nInstance] = useState<I18nType | null>(null);
 
   useEffect(() => {
-    const instance = createI18nInstance(lang);
+    const instance = createI18nInstance(lang as 'en' | 'ru');
     setI18nInstance(instance);
-    document.documentElement.lang = lang;
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = lang;
+    }
   }, [lang]);
 
   if (!i18nInstance) {
@@ -154,7 +151,6 @@ export default function App() {
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  const { t } = useTranslation();
   let message = 'Oops!';
   let details = 'An unexpected error occurred.';
   let stack: string | undefined;
@@ -162,11 +158,29 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   if (isRouteErrorResponse(error)) {
     message = error.status === 404 ? '404' : 'Error';
     details =
-      error.status === 404 ? t('page404.message') : error.statusText || details;
+      error.status === 404 ? 'Page not found' : error.statusText || details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
     stack = error.stack;
   }
+
+  return (
+    <I18nProvider>
+      <ErrorBoundaryContent message={message} details={details} stack={stack} />
+    </I18nProvider>
+  );
+}
+
+function ErrorBoundaryContent({
+  message,
+  details,
+  stack,
+}: {
+  message: string;
+  details: string;
+  stack?: string;
+}) {
+  const { t } = useTranslation();
 
   return (
     <main className="pt-16 p-4 container mx-auto h-screen flex flex-col justify-center items-center">

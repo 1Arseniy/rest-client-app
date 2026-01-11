@@ -1,18 +1,29 @@
 import admin from 'firebase-admin';
 import type { RequestHistory } from '@/types/types';
 
+// Initialize Firebase Admin only if not already initialized
+// This prevents errors on Vercel if credentials are not available
 if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.applicationDefault(),
-  });
+  try {
+    admin.initializeApp({
+      credential: admin.credential.applicationDefault(),
+    });
+  } catch (error) {
+    // Log error but don't throw - allows app to continue if Firebase Admin is not configured
+    // This is important for Vercel deployments where credentials might not be set up
+    console.warn('Firebase Admin initialization failed:', error);
+  }
 }
 
-export const adminAuth = admin.auth();
-export const adminDb = admin.firestore();
+export const adminAuth = admin.apps.length > 0 ? admin.auth() : null;
+export const adminDb = admin.apps.length > 0 ? admin.firestore() : null;
 
 export const saveRequestHistoryServer = async (
   requestData: Omit<RequestHistory, 'id'>
 ) => {
+  if (!adminDb) {
+    throw new Error('Firebase Admin is not initialized');
+  }
   try {
     const docRef = await adminDb.collection('requestHistory').add({
       ...requestData,
@@ -30,6 +41,9 @@ export const getRequestHistoryServer = async (
   userId: string,
   limitCount: number = 50
 ) => {
+  if (!adminDb) {
+    throw new Error('Firebase Admin is not initialized');
+  }
   try {
     const snapshot = await adminDb
       .collection('requestHistory')

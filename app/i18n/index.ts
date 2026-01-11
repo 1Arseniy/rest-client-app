@@ -34,5 +34,8 @@ export function getClientI18n() {
   return clientI18n;
 }
 
-const instance = getClientI18n();
-export default instance;
+// Default export for tests and client-side usage only
+// Note: This creates an instance on import, but should only be imported in tests
+// which run in Node.js environment, not during SSR
+export default getClientI18n();
+

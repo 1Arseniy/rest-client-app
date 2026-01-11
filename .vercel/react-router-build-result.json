@@ -81,9 +81,9 @@
     }
   },
   "reactRouterConfig": {
-    "appDirectory": "C:/rest-client-app/app",
+    "appDirectory": "D:/React-js-Rss/rest-client-app/app",
     "basename": "/",
-    "buildDirectory": "C:/rest-client-app/build",
+    "buildDirectory": "D:/React-js-Rss/rest-client-app/build",
     "future": {
       "unstable_middleware": false,
       "unstable_optimizeDeps": false,
