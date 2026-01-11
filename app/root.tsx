@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import {
   isRouteErrorResponse,
   Links,
@@ -22,24 +22,8 @@ import { createI18nInstance } from './i18n';
 
 type LoaderData = {
   lang: 'en' | 'ru';
+  i18nInstance: I18nType;
 };
-
-export async function loader({
-  request,
-}: LoaderFunctionArgs): Promise<LoaderData> {
-  const acceptLanguage = request.headers.get('accept-language');
-  let lang: LoaderData['lang'] = 'en';
-
-  if (acceptLanguage) {
-    const supported: LoaderData['lang'][] = ['en', 'ru'];
-    const preferred = (acceptLanguage.split(',')[0].split('-')[0] ||
-      'en') as LoaderData['lang'];
-    if (supported.includes(preferred)) {
-      lang = preferred;
-    }
-  }
-  return { lang };
-}
 
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -54,8 +38,39 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
-export function Layout({ children }: { children: React.ReactNode }) {
-  const { lang } = useLoaderData<typeof loader>() || { lang: 'en' };
+// export async function loader({
+//   request,
+// }: LoaderFunctionArgs): Promise<LoaderData> {
+//   const acceptLanguage = request.headers.get('accept-language');
+//   let lang: LoaderData['lang'] = 'en';
+//   const i18nInstance = createI18nInstance(lang);
+
+//   if (acceptLanguage) {
+//     const supported: LoaderData['lang'][] = ['en', 'ru'];
+//     const preferred = (acceptLanguage.split(',')[0].split('-')[0] ||
+//       'en') as LoaderData['lang'];
+//     if (supported.includes(preferred)) {
+//       lang = preferred;
+//     }
+//   }
+//   return { lang, i18nInstance };
+// }
+export async function loader({
+  request,
+}: LoaderFunctionArgs): Promise<{ lang: string }> {
+  const acceptLanguage = request.headers.get('accept-language');
+  const supported = ['en', 'ru'];
+  const preferred = (acceptLanguage?.split(',')[0].split('-')[0] || 'en') as
+    | 'en'
+    | 'ru';
+  return { lang: supported.includes(preferred) ? preferred : 'en' };
+}
+
+// Create client-side context for i18n
+const I18nContext = createContext<I18nType | null>(null);
+
+export function I18nProvider({ children }: { children: React.ReactNode }) {
+  const { lang } = useLoaderData<LoaderData>();
   const [i18nInstance, setI18nInstance] = useState<I18nType | null>(null);
 
   useEffect(() => {
@@ -64,8 +79,31 @@ export function Layout({ children }: { children: React.ReactNode }) {
     document.documentElement.lang = lang;
   }, [lang]);
 
+  if (!i18nInstance) {
+    return <div>{children}</div>;
+  }
+
   return (
-    <html lang="en">
+    <I18nContext.Provider value={i18nInstance}>
+      <I18nextProvider i18n={i18nInstance}>{children}</I18nextProvider>
+    </I18nContext.Provider>
+  );
+}
+
+export function Layout({ children }: { children: React.ReactNode }) {
+  // const { lang, i18nInstance } = useLoaderData<typeof loader>() || {
+  //   lang: 'en',
+  // };
+  // const [i18nInstance, setI18nInstance] = useState<I18nType | null>(null);
+
+  // useEffect(() => {
+  //   const instance = createI18nInstance(lang);
+  //   setI18nInstance(instance);
+  //   document.documentElement.lang = lang;
+  // }, [lang]);
+
+  return (
+    <html lang={useLoaderData<typeof loader>().lang}>
       <head>
         <link
           rel="icon"
@@ -79,7 +117,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="w-full max-w-[1440px] m-auto">
-        {i18nInstance ? (
+        <I18nProvider>
+          <Header />
+          {children}
+          <Footer />
+          <ScrollRestoration />
+          <Scripts />
+          <Toaster />
+        </I18nProvider>
+        {/* {i18nInstance ? (
           <I18nextProvider i18n={i18nInstance}>
             <Header />
             {children}
@@ -97,7 +143,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <Scripts />
             <Toaster />
           </div>
-        )}
+        )} */}
       </body>
     </html>
   );
