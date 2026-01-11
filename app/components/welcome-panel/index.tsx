@@ -2,7 +2,8 @@ import { auth } from '@/services/firebase';
 
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { useIdToken } from 'react-firebase-hooks/auth';
+import * as reactFirebaseHooksAuth from 'react-firebase-hooks/auth';
+const { useIdToken } = reactFirebaseHooksAuth;
 
 function WelcomePanel() {
   const { t } = useTranslation();

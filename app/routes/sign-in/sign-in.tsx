@@ -7,7 +7,8 @@ import { makeSchemas } from '@/validation/validation';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { auth, logInWithEmailAndPassword } from '../../services/firebase';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import * as reactFirebaseHooksAuth from 'react-firebase-hooks/auth';
+const { useAuthState } = reactFirebaseHooksAuth;
 import { useEffect, useMemo } from 'react';
 import { Spinner } from '@/components/ui/spinner';
 

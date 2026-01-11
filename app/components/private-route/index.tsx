@@ -1,6 +1,7 @@
 import { Spinner } from '@/components/ui/spinner';
 
-import { useAuthState } from 'react-firebase-hooks/auth';
+import * as reactFirebaseHooksAuth from 'react-firebase-hooks/auth';
+const { useAuthState } = reactFirebaseHooksAuth;
 
 import { auth } from '@/services/firebase';
 

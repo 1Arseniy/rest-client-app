@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
 
 import '@/components/header/header.css';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import * as reactFirebaseHooksAuth from 'react-firebase-hooks/auth';
+const { useAuthState } = reactFirebaseHooksAuth;
 import { auth, logout } from '@/services/firebase';
 import LanguageSelect from '../ui/select/language-select';
 import {

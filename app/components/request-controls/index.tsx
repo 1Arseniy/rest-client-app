@@ -4,7 +4,8 @@ import { FormField } from '@/components/ui/form/form';
 
 import { useFieldArray, useForm, type SubmitHandler } from 'react-hook-form';
 import { useNavigate, useParams, useSearchParams } from 'react-router';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import * as reactFirebaseHooksAuth from 'react-firebase-hooks/auth';
+const { useAuthState } = reactFirebaseHooksAuth;
 
 import { useTranslation } from 'react-i18next';
 import ResponsePanel from '../response-panel';
