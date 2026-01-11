@@ -4,7 +4,7 @@ import { Label } from '@/components/ui/label/label';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Separator } from '@/components/ui/separator';
+import { Separator } from '@/components/ui/separator/separator';
 import useVariables from '@/hooks/useVariables';
 import { useEffect, useState } from 'react';
 
@@ -136,7 +136,7 @@ export default function Variables() {
   ));
   return (
     <>
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 pt-5 pb-5 pr-2.5 pl-2.5">
         <div className="w-full max-w-2xl rounded-2xl bg-white p-10 shadow-lg">
           <h2 className="mb-6 text-center text-3xl font-bold text-gray-800">
             {t('variables.variables')}

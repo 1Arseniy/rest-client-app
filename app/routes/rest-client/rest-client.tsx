@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 
 import PrivateRoute from '@/components/private-route';
+import getHeaders from '@/utils/getHeaders';
 import type { LoaderFunctionArgs } from 'react-router';
 import { returnToString, toBase64 } from '@/utils/to-base-64';
 import { saveRequestHistoryServer } from '@/services/firebase-admin';
@@ -214,20 +215,14 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const { method, requestUrl, body } = params;
   const reverseToArr = language.toString().split('/');
   const userId = searchParams.get('userId');
-
-  const getHeaders = Array.from(searchParams.entries())
-    .filter(([key]) => key !== 'language' && key !== 'userId')
-    .map(([key, value]) => ({
-      key,
-      value: returnToString(value),
-    }));
+  const headers = getHeaders(searchParams);
 
   const [res, snippet] = await Promise.all([
-    await getData({ requestUrl, method, headers: getHeaders, body, userId }),
+    await getData({ requestUrl, method, headers, body, userId }),
     await generatorSnippet({
       requestUrl,
       method,
-      headers: getHeaders,
+      headers,
       body,
       language: reverseToArr,
     }),

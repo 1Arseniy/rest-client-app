@@ -14,4 +14,10 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'app'),
     },
   },
+  optimizeDeps: {
+    include: ['react-firebase-hooks/auth'],
+  },
+  ssr: {
+    noExternal: ['react-firebase-hooks'],
+  },
 });

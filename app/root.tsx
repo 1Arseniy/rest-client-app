@@ -1,3 +1,4 @@
+import React, { createContext, useEffect, useState } from 'react';
 import {
   isRouteErrorResponse,
   Links,
@@ -5,41 +6,19 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
   type LoaderFunctionArgs,
   Link,
+  useLoaderData,
 } from 'react-router';
 import type { Route } from './+types/root';
 import Footer from '@/components/footer';
 import Header from '@/components/header';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import '@/styles/app.css';
-import { createI18nInstance } from './i18n';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import type { i18n as I18nType } from 'i18next';
-import React, { useEffect, useState } from 'react';
 import { Toaster } from 'sonner';
-
-type LoaderData = {
-  lang: 'en' | 'ru';
-};
-
-export async function loader({
-  request,
-}: LoaderFunctionArgs): Promise<LoaderData> {
-  const acceptLanguage = request.headers.get('accept-language');
-  let lang: LoaderData['lang'] = 'en';
-
-  if (acceptLanguage) {
-    const supported: LoaderData['lang'][] = ['en', 'ru'];
-    const preferred = (acceptLanguage.split(',')[0].split('-')[0] ||
-      'en') as LoaderData['lang'];
-    if (supported.includes(preferred)) {
-      lang = preferred;
-    }
-  }
-  return { lang };
-}
+import type { i18n as I18nType } from 'i18next';
+import { createI18nInstance } from './i18n';
 
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -54,18 +33,74 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
-export function Layout({ children }: { children: React.ReactNode }) {
-  const { lang } = useLoaderData<typeof loader>() || { lang: 'en' };
+// export async function loader({
+//   request,
+// }: LoaderFunctionArgs): Promise<LoaderData> {
+//   const acceptLanguage = request.headers.get('accept-language');
+//   let lang: LoaderData['lang'] = 'en';
+//   const i18nInstance = createI18nInstance(lang);
+
+//   if (acceptLanguage) {
+//     const supported: LoaderData['lang'][] = ['en', 'ru'];
+//     const preferred = (acceptLanguage.split(',')[0].split('-')[0] ||
+//       'en') as LoaderData['lang'];
+//     if (supported.includes(preferred)) {
+//       lang = preferred;
+//     }
+//   }
+//   return { lang, i18nInstance };
+// }
+export async function loader({
+  request,
+}: LoaderFunctionArgs): Promise<{ lang: string }> {
+  const acceptLanguage = request.headers.get('accept-language');
+  const supported = ['en', 'ru'];
+  const preferred = (acceptLanguage?.split(',')[0].split('-')[0] || 'en') as
+    | 'en'
+    | 'ru';
+  return { lang: supported.includes(preferred) ? preferred : 'en' };
+}
+
+// Create client-side context for i18n
+const I18nContext = createContext<I18nType | null>(null);
+
+export function I18nProvider({ children }: { children: React.ReactNode }) {
+  const { lang } = useLoaderData<{ lang: string }>();
   const [i18nInstance, setI18nInstance] = useState<I18nType | null>(null);
 
   useEffect(() => {
-    const instance = createI18nInstance(lang);
+    const instance = createI18nInstance(lang as 'en' | 'ru');
     setI18nInstance(instance);
-    document.documentElement.lang = lang;
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = lang;
+    }
   }, [lang]);
 
+  if (!i18nInstance) {
+    return <div>{children}</div>;
+  }
+
   return (
-    <html lang={lang}>
+    <I18nContext.Provider value={i18nInstance}>
+      <I18nextProvider i18n={i18nInstance}>{children}</I18nextProvider>
+    </I18nContext.Provider>
+  );
+}
+
+export function Layout({ children }: { children: React.ReactNode }) {
+  // const { lang, i18nInstance } = useLoaderData<typeof loader>() || {
+  //   lang: 'en',
+  // };
+  // const [i18nInstance, setI18nInstance] = useState<I18nType | null>(null);
+
+  // useEffect(() => {
+  //   const instance = createI18nInstance(lang);
+  //   setI18nInstance(instance);
+  //   document.documentElement.lang = lang;
+  // }, [lang]);
+
+  return (
+    <html lang={useLoaderData<typeof loader>().lang}>
       <head>
         <link
           rel="icon"
@@ -78,8 +113,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
-        {i18nInstance ? (
+      <body className="w-full max-w-[1440px] m-auto">
+        <I18nProvider>
+          <Header />
+          {children}
+          <Footer />
+          <ScrollRestoration />
+          <Scripts />
+          <Toaster />
+        </I18nProvider>
+        {/* {i18nInstance ? (
           <I18nextProvider i18n={i18nInstance}>
             <Header />
             {children}
@@ -97,7 +140,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <Scripts />
             <Toaster />
           </div>
-        )}
+        )} */}
       </body>
     </html>
   );
@@ -108,7 +151,6 @@ export default function App() {
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  const { t } = useTranslation();
   let message = 'Oops!';
   let details = 'An unexpected error occurred.';
   let stack: string | undefined;
@@ -116,11 +158,29 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   if (isRouteErrorResponse(error)) {
     message = error.status === 404 ? '404' : 'Error';
     details =
-      error.status === 404 ? t('page404.message') : error.statusText || details;
+      error.status === 404 ? 'Page not found' : error.statusText || details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
     stack = error.stack;
   }
+
+  return (
+    <I18nProvider>
+      <ErrorBoundaryContent message={message} details={details} stack={stack} />
+    </I18nProvider>
+  );
+}
+
+function ErrorBoundaryContent({
+  message,
+  details,
+  stack,
+}: {
+  message: string;
+  details: string;
+  stack?: string;
+}) {
+  const { t } = useTranslation();
 
   return (
     <main className="pt-16 p-4 container mx-auto h-screen flex flex-col justify-center items-center">

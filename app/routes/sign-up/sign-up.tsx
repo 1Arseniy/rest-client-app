@@ -6,7 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { makeSchemas } from '@/validation/validation';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import * as reactFirebaseHooksAuth from 'react-firebase-hooks/auth';
+const { useAuthState } = reactFirebaseHooksAuth;
 import { auth, registerWithEmailAndPassword } from '../../services/firebase';
 import { useEffect, useMemo } from 'react';
 import { Spinner } from '@/components/ui/spinner';
@@ -48,7 +49,7 @@ export default function SignUp() {
   return loading ? (
     <Spinner variant="bars" size={54} />
   ) : (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 pt-5 pb-5 pr-2.5 pl-2.5">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
         <h2 className="mb-6 text-center text-2xl font-bold text-gray-800">
           {t('auth.signUp')}
@@ -151,7 +152,7 @@ export default function SignUp() {
         <Link to="/sign-in">
           <Button
             variant="link"
-            className="cursor-pointer w-full text-center text-gray-500"
+            className="cursor-pointer w-full text-center text-gray-500 whitespace-pre-line"
           >
             {t('signUpRoute.linkToSignIn')}
           </Button>

@@ -1,0 +1,183 @@
+{
+  "buildManifest": {
+    "serverBundles": {
+      "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0": {
+        "id": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+        "file": "build/server/nodejs_eyJydW50aW1lIjoibm9kZWpzIn0/index.js",
+        "config": {
+          "runtime": "nodejs"
+        }
+      }
+    },
+    "routeIdToServerBundleId": {
+      "routes/home": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/sign-in/sign-in": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/sign-up/sign-up": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/variables/index": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/history/index": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/rest-client/rest-client": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0"
+    },
+    "routes": {
+      "root": {
+        "id": "root",
+        "file": "app/root.tsx",
+        "path": "",
+        "config": {}
+      },
+      "routes/home": {
+        "id": "routes/home",
+        "parentId": "root",
+        "file": "app/routes/home.tsx",
+        "index": true,
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "routes/sign-in/sign-in": {
+        "id": "routes/sign-in/sign-in",
+        "parentId": "root",
+        "file": "app/routes/sign-in/sign-in.tsx",
+        "path": "sign-in",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "routes/sign-up/sign-up": {
+        "id": "routes/sign-up/sign-up",
+        "parentId": "root",
+        "file": "app/routes/sign-up/sign-up.tsx",
+        "path": "sign-up",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "routes/variables/index": {
+        "id": "routes/variables/index",
+        "parentId": "root",
+        "file": "app/routes/variables/index.tsx",
+        "path": "variables",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "routes/history/index": {
+        "id": "routes/history/index",
+        "parentId": "root",
+        "file": "app/routes/history/index.tsx",
+        "path": "history",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "routes/rest-client/rest-client": {
+        "id": "routes/rest-client/rest-client",
+        "parentId": "root",
+        "file": "app/routes/rest-client/rest-client.tsx",
+        "path": "rest-client/:method?/:requestUrl?/:body?",
+        "config": {
+          "runtime": "nodejs"
+        }
+      }
+    }
+  },
+  "reactRouterConfig": {
+    "appDirectory": "D:/React-js-Rss/rest-client-app/app",
+    "basename": "/",
+    "buildDirectory": "D:/React-js-Rss/rest-client-app/build",
+    "future": {
+      "unstable_middleware": false,
+      "unstable_optimizeDeps": false,
+      "unstable_splitRouteModules": false,
+      "unstable_subResourceIntegrity": false,
+      "unstable_viteEnvironmentApi": false
+    },
+    "routes": {
+      "root": {
+        "id": "root",
+        "file": "root.tsx",
+        "path": ""
+      },
+      "routes/home": {
+        "id": "routes/home",
+        "parentId": "root",
+        "file": "routes/home.tsx",
+        "index": true
+      },
+      "routes/sign-in/sign-in": {
+        "id": "routes/sign-in/sign-in",
+        "parentId": "root",
+        "file": "routes/sign-in/sign-in.tsx",
+        "path": "sign-in"
+      },
+      "routes/sign-up/sign-up": {
+        "id": "routes/sign-up/sign-up",
+        "parentId": "root",
+        "file": "routes/sign-up/sign-up.tsx",
+        "path": "sign-up"
+      },
+      "routes/variables/index": {
+        "id": "routes/variables/index",
+        "parentId": "root",
+        "file": "routes/variables/index.tsx",
+        "path": "variables"
+      },
+      "routes/history/index": {
+        "id": "routes/history/index",
+        "parentId": "root",
+        "file": "routes/history/index.tsx",
+        "path": "history"
+      },
+      "routes/rest-client/rest-client": {
+        "id": "routes/rest-client/rest-client",
+        "parentId": "root",
+        "file": "routes/rest-client/rest-client.tsx",
+        "path": "rest-client/:method?/:requestUrl?/:body?"
+      }
+    },
+    "routeDiscovery": {
+      "mode": "lazy",
+      "manifestPath": "/__manifest"
+    },
+    "serverBuildFile": "index.js",
+    "serverModuleFormat": "esm",
+    "ssr": true,
+    "unstable_routeConfig": [
+      {
+        "id": "root",
+        "path": "",
+        "file": "root.tsx",
+        "children": [
+          {
+            "file": "routes/home.tsx",
+            "index": true
+          },
+          {
+            "file": "routes/sign-in/sign-in.tsx",
+            "path": "sign-in"
+          },
+          {
+            "file": "routes/sign-up/sign-up.tsx",
+            "path": "sign-up"
+          },
+          {
+            "file": "routes/variables/index.tsx",
+            "path": "variables"
+          },
+          {
+            "file": "routes/history/index.tsx",
+            "path": "history"
+          },
+          {
+            "file": "routes/rest-client/rest-client.tsx",
+            "path": "rest-client/:method?/:requestUrl?/:body?"
+          }
+        ]
+      }
+    ]
+  },
+  "viteConfig": {
+    "build": {
+      "assetsDir": "assets"
+    }
+  }
+}
